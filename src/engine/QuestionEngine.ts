@@ -17,6 +17,8 @@ export class QuestionEngine<T extends HasDifficulty> {
   private readonly byDifficulty: Map<Difficulty, T[]>;
   private readonly pools = new Map<Difficulty, T[]>();
   private readonly seen = new Set<string>();
+  private anyPool: T[] = [];
+  private readonly anySeen = new Set<string>();
 
   constructor(dataset: T[]) {
     this.dataset = dataset;
@@ -46,9 +48,25 @@ export class QuestionEngine<T extends HasDifficulty> {
     return item;
   }
 
+  /** Like next(), but ignores difficulty entirely and draws from the whole dataset as one pool. */
+  nextAny(): T | null {
+    if (this.anyPool.length === 0) {
+      const unseen = this.dataset.filter((item) => !this.anySeen.has(item.id));
+      this.anyPool = shuffle(unseen.length > 0 ? unseen : this.dataset);
+    }
+
+    const item = this.anyPool.pop();
+    if (!item) return null;
+
+    this.anySeen.add(item.id);
+    return item;
+  }
+
   reset(): void {
     this.pools.clear();
     this.seen.clear();
+    this.anyPool = [];
+    this.anySeen.clear();
   }
 
   get totalCount(): number {

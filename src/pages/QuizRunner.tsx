@@ -21,7 +21,7 @@ export function QuizRunner() {
 
   switch (mode.id) {
     case 'quotes':
-      return <QuotesMode difficulty={difficulty} />;
+      return <QuotesMode />;
     case 'spellVsVillain':
       return <SpellVsVillainMode difficulty={difficulty} />;
     case 'guessHouse':

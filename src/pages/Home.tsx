@@ -15,7 +15,7 @@ export function Home() {
         {modeCatalog.map((mode) => (
           <Link
             key={mode.id}
-            to={`/modes/${mode.id}`}
+            to={mode.id === 'quotes' ? '/play/quotes' : `/modes/${mode.id}`}
             className="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md dark:border-slate-700"
           >
             <h2 className="font-semibold text-slate-900 dark:text-slate-100">{mode.name}</h2>

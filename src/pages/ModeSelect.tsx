@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { modeById } from '../data/modeCatalog';
 import type { Difficulty, QuizMode } from '../engine/types';
 import { useGameSession } from '../store/useGameSession';
@@ -16,6 +16,11 @@ export function ModeSelect() {
   const mode = modeById.get(modeId as QuizMode);
   if (!mode) {
     return <p>Unknown quiz mode.</p>;
+  }
+
+  // Popular Quotes has no difficulty picker — skip straight to play.
+  if (mode.id === 'quotes') {
+    return <Navigate to="/play/quotes" replace />;
   }
 
   function handleStart(difficulty: Difficulty) {
