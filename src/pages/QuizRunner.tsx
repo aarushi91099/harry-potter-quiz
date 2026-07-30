@@ -7,12 +7,10 @@ import { FinishDialogueMode } from '../modes/finishDialogue/FinishDialogueMode';
 import { GuessCharacterMode } from '../modes/guessCharacter/GuessCharacterMode';
 import { BlurryCharacterMode } from '../modes/blurryCharacter/BlurryCharacterMode';
 import { GuessCreatureMode } from '../modes/guessCreature/GuessCreatureMode';
-import { useGameSession } from '../store/useGameSession';
 import type { QuizMode } from '../engine/types';
 
 export function QuizRunner() {
   const { modeId } = useParams<{ modeId: string }>();
-  const difficulty = useGameSession((s) => s.difficulty);
   const mode = modeById.get(modeId as QuizMode);
 
   if (!mode) {
@@ -23,16 +21,16 @@ export function QuizRunner() {
     case 'quotes':
       return <QuotesMode />;
     case 'spellVsVillain':
-      return <SpellVsVillainMode difficulty={difficulty} />;
+      return <SpellVsVillainMode />;
     case 'guessHouse':
-      return <GuessHouseMode difficulty={difficulty} />;
+      return <GuessHouseMode />;
     case 'finishDialogue':
-      return <FinishDialogueMode difficulty={difficulty} />;
+      return <FinishDialogueMode />;
     case 'guessCharacter':
-      return <GuessCharacterMode difficulty={difficulty} />;
+      return <GuessCharacterMode />;
     case 'blurryCharacter':
-      return <BlurryCharacterMode difficulty={difficulty} />;
+      return <BlurryCharacterMode />;
     case 'guessCreature':
-      return <GuessCreatureMode difficulty={difficulty} />;
+      return <GuessCreatureMode />;
   }
 }

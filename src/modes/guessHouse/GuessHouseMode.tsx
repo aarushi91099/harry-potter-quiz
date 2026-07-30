@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AnswerFeedback } from '../../components/AnswerFeedback';
 import { SessionHeader } from '../../components/SessionHeader';
 import { houseScenarios } from '../../data/houseScenarios';
 import { QuestionEngine } from '../../engine/QuestionEngine';
-import type { Attempt, Difficulty, HouseName } from '../../engine/types';
+import type { Attempt, HouseName } from '../../engine/types';
 import { useGameSession } from '../../store/useGameSession';
 
 const HOUSES: HouseName[] = ['Gryffindor', 'Ravenclaw', 'Hufflepuff', 'Slytherin'];
@@ -14,11 +14,16 @@ interface Feedback {
   reasoning: string;
 }
 
-export function GuessHouseMode({ difficulty }: { difficulty: Difficulty }) {
+export function GuessHouseMode() {
   const engine = useMemo(() => new QuestionEngine(houseScenarios), []);
-  const [currentScenario, setCurrentScenario] = useState(() => engine.next(difficulty));
+  const [currentScenario, setCurrentScenario] = useState(() => engine.nextAny());
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const submitAnswer = useGameSession((s) => s.submitAnswer);
+  const start = useGameSession((s) => s.start);
+
+  useEffect(() => {
+    start('guessHouse');
+  }, [start]);
 
   function handleSelect(house: HouseName) {
     if (!currentScenario || feedback) return;
@@ -39,11 +44,11 @@ export function GuessHouseMode({ difficulty }: { difficulty: Difficulty }) {
 
   function handleNext() {
     setFeedback(null);
-    setCurrentScenario(engine.next(difficulty));
+    setCurrentScenario(engine.nextAny());
   }
 
   if (!currentScenario) {
-    return <p>No house scenarios available at this difficulty yet.</p>;
+    return <p>No house scenarios available.</p>;
   }
 
   return (

@@ -8,10 +8,10 @@ import { spellsById } from '../../data/spells';
 import { useGameSession } from '../../store/useGameSession';
 import { useProgression } from '../../store/useProgression';
 
-function renderMode(difficulty: 'easy' | 'medium' | 'hard' = 'easy') {
+function renderMode() {
   return render(
     <MemoryRouter>
-      <SpellVsVillainMode difficulty={difficulty} />
+      <SpellVsVillainMode />
     </MemoryRouter>,
   );
 }
@@ -25,7 +25,6 @@ function findRenderedScenario() {
 
 describe('SpellVsVillainMode', () => {
   beforeEach(() => {
-    useGameSession.getState().start('spellVsVillain', 'easy');
     useProgression.getState().reset();
   });
 

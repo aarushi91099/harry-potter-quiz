@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isDifficultyUnlocked, levelForXp, xpForAnswer, xpIntoCurrentLevel } from './XPSystem';
+import { levelForXp, xpForAnswer, xpIntoCurrentLevel } from './XPSystem';
 
 describe('XPSystem', () => {
   it('awards more XP for harder difficulties', () => {
@@ -16,14 +16,5 @@ describe('XPSystem', () => {
 
   it('computes progress into the current level', () => {
     expect(xpIntoCurrentLevel(150)).toEqual({ current: 50, required: 100 });
-  });
-
-  it('gates medium/hard difficulty behind level thresholds', () => {
-    expect(isDifficultyUnlocked(0, 'easy')).toBe(true);
-    expect(isDifficultyUnlocked(0, 'medium')).toBe(false);
-    expect(isDifficultyUnlocked(0, 'hard')).toBe(false);
-    expect(isDifficultyUnlocked(200, 'medium')).toBe(true);
-    expect(isDifficultyUnlocked(200, 'hard')).toBe(false);
-    expect(isDifficultyUnlocked(500, 'hard')).toBe(true);
   });
 });

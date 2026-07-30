@@ -27,7 +27,7 @@ export function QuotesMode() {
   const start = useGameSession((s) => s.start);
 
   useEffect(() => {
-    start('quotes', 'easy');
+    start('quotes');
   }, [start]);
 
   const correctCharacter = currentQuote ? charactersById.get(currentQuote.characterId) : undefined;

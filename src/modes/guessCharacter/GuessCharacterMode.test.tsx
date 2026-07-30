@@ -8,10 +8,10 @@ import { charactersById } from '../../data/characters';
 import { useGameSession } from '../../store/useGameSession';
 import { useProgression } from '../../store/useProgression';
 
-function renderMode(difficulty: 'easy' | 'medium' | 'hard' = 'easy') {
+function renderMode() {
   return render(
     <MemoryRouter>
-      <GuessCharacterMode difficulty={difficulty} />
+      <GuessCharacterMode />
     </MemoryRouter>,
   );
 }
@@ -37,7 +37,6 @@ function findRenderedCharacter() {
 
 describe('GuessCharacterMode', () => {
   beforeEach(() => {
-    useGameSession.getState().start('guessCharacter', 'easy');
     useProgression.getState().reset();
   });
 

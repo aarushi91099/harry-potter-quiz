@@ -31,7 +31,7 @@ describe('useToastStore', () => {
 
 describe('useGameSession -> useToastStore wiring', () => {
   beforeEach(() => {
-    useGameSession.getState().start('quotes', 'easy');
+    useGameSession.getState().start('quotes');
     useProgression.getState().reset();
     useToastStore.setState({ toasts: [] });
   });

@@ -4,13 +4,12 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { FinishDialogueMode } from './FinishDialogueMode';
 import { dialogues } from '../../data/dialogues';
-import { useGameSession } from '../../store/useGameSession';
 import { useProgression } from '../../store/useProgression';
 
-function renderMode(difficulty: 'easy' | 'medium' | 'hard' = 'easy') {
+function renderMode() {
   return render(
     <MemoryRouter>
-      <FinishDialogueMode difficulty={difficulty} />
+      <FinishDialogueMode />
     </MemoryRouter>,
   );
 }
@@ -24,7 +23,6 @@ function findRenderedDialogue() {
 
 describe('FinishDialogueMode', () => {
   beforeEach(() => {
-    useGameSession.getState().start('finishDialogue', 'easy');
     useProgression.getState().reset();
   });
 

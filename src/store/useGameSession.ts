@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Attempt, AttemptResult, Difficulty, QuizMode } from '../engine/types';
+import type { Attempt, AttemptResult, QuizMode } from '../engine/types';
 import type { Achievement } from '../scoring/AchievementSystem';
 import { scoreAttempt } from '../scoring/ScoreCalculator';
 import { multiplierForStreak } from '../scoring/StreakSystem';
@@ -13,7 +13,6 @@ export interface SessionAnswerResult extends AttemptResult {
 
 interface GameSessionState {
   mode: QuizMode | null;
-  difficulty: Difficulty;
   score: number;
   correctCount: number;
   totalCount: number;
@@ -21,7 +20,7 @@ interface GameSessionState {
   bestStreakThisSession: number;
   lastResult: AttemptResult | null;
 
-  start: (mode: QuizMode, difficulty: Difficulty) => void;
+  start: (mode: QuizMode) => void;
   /** Grades one answer: updates session score/streak and forwards XP/achievement bookkeeping to useProgression. */
   submitAnswer: (attempt: Attempt) => SessionAnswerResult;
   end: () => void;
@@ -29,7 +28,6 @@ interface GameSessionState {
 
 const initialSessionFields = {
   mode: null,
-  difficulty: 'easy' as Difficulty,
   score: 0,
   correctCount: 0,
   totalCount: 0,
@@ -41,7 +39,7 @@ const initialSessionFields = {
 export const useGameSession = create<GameSessionState>()((set, get) => ({
   ...initialSessionFields,
 
-  start: (mode, difficulty) => set({ ...initialSessionFields, mode, difficulty }),
+  start: (mode) => set({ ...initialSessionFields, mode }),
 
   submitAnswer: (attempt) => {
     const state = get();

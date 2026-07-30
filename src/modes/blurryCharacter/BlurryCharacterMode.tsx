@@ -6,7 +6,7 @@ import { characters } from '../../data/characters';
 import type { Character } from '../../data/types';
 import { BlurEngine } from '../../engine/BlurEngine';
 import { QuestionEngine } from '../../engine/QuestionEngine';
-import type { Attempt, Difficulty } from '../../engine/types';
+import type { Attempt } from '../../engine/types';
 import { useGameSession } from '../../store/useGameSession';
 
 const BLUR_DURATION_MS = 15_000;
@@ -17,13 +17,18 @@ interface Feedback {
   knownFor?: string;
 }
 
-export function BlurryCharacterMode({ difficulty }: { difficulty: Difficulty }) {
+export function BlurryCharacterMode() {
   const engine = useMemo(() => new QuestionEngine(characters), []);
-  const [currentCharacter, setCurrentCharacter] = useState(() => engine.next(difficulty));
+  const [currentCharacter, setCurrentCharacter] = useState(() => engine.nextAny());
   const blurEngine = useMemo(() => new BlurEngine({ durationMs: BLUR_DURATION_MS }), [currentCharacter]);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [, forceRerender] = useState(0);
   const submitAnswer = useGameSession((s) => s.submitAnswer);
+  const start = useGameSession((s) => s.start);
+
+  useEffect(() => {
+    start('blurryCharacter');
+  }, [start]);
 
   useEffect(() => {
     blurEngine.start();
@@ -49,11 +54,11 @@ export function BlurryCharacterMode({ difficulty }: { difficulty: Difficulty }) 
 
   function handleNext() {
     setFeedback(null);
-    setCurrentCharacter(engine.next(difficulty));
+    setCurrentCharacter(engine.nextAny());
   }
 
   if (!currentCharacter) {
-    return <p>No characters available at this difficulty yet.</p>;
+    return <p>No characters available.</p>;
   }
 
   const blurPx = feedback ? 0 : blurEngine.blurPxAt();

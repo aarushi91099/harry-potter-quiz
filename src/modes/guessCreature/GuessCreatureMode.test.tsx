@@ -7,10 +7,10 @@ import { creaturesById } from '../../data/creatures';
 import { useGameSession } from '../../store/useGameSession';
 import { useProgression } from '../../store/useProgression';
 
-function renderMode(difficulty: 'easy' | 'medium' | 'hard' = 'easy') {
+function renderMode() {
   return render(
     <MemoryRouter>
-      <GuessCreatureMode difficulty={difficulty} />
+      <GuessCreatureMode />
     </MemoryRouter>,
   );
 }
@@ -27,7 +27,6 @@ function findRenderedCreature() {
 
 describe('GuessCreatureMode', () => {
   beforeEach(() => {
-    useGameSession.getState().start('guessCreature', 'easy');
     useProgression.getState().reset();
   });
 

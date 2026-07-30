@@ -5,7 +5,7 @@ import type { Attempt } from '../engine/types';
 
 describe('useGameSession', () => {
   beforeEach(() => {
-    useGameSession.getState().start('quotes', 'easy');
+    useGameSession.getState().start('quotes');
     useProgression.getState().reset();
   });
 
@@ -76,7 +76,7 @@ describe('useGameSession', () => {
       difficulty: 'easy',
       correct: true,
     });
-    useGameSession.getState().start('guessHouse', 'hard');
+    useGameSession.getState().start('guessHouse');
     const state = useGameSession.getState();
     expect(state.mode).toBe('guessHouse');
     expect(state.score).toBe(0);

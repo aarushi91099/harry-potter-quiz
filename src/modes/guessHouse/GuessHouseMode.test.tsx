@@ -4,15 +4,14 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { GuessHouseMode } from './GuessHouseMode';
 import { houseScenarios } from '../../data/houseScenarios';
-import { useGameSession } from '../../store/useGameSession';
 import { useProgression } from '../../store/useProgression';
 
 const HOUSES = ['Gryffindor', 'Ravenclaw', 'Hufflepuff', 'Slytherin'] as const;
 
-function renderMode(difficulty: 'easy' | 'medium' | 'hard' = 'easy') {
+function renderMode() {
   return render(
     <MemoryRouter>
-      <GuessHouseMode difficulty={difficulty} />
+      <GuessHouseMode />
     </MemoryRouter>,
   );
 }
@@ -26,7 +25,6 @@ function findRenderedScenario() {
 
 describe('GuessHouseMode', () => {
   beforeEach(() => {
-    useGameSession.getState().start('guessHouse', 'easy');
     useProgression.getState().reset();
   });
 

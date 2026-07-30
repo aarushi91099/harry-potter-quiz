@@ -7,10 +7,10 @@ import { charactersById } from '../../data/characters';
 import { useGameSession } from '../../store/useGameSession';
 import { useProgression } from '../../store/useProgression';
 
-function renderMode(difficulty: 'easy' | 'medium' | 'hard' = 'easy') {
+function renderMode() {
   return render(
     <MemoryRouter>
-      <BlurryCharacterMode difficulty={difficulty} />
+      <BlurryCharacterMode />
     </MemoryRouter>,
   );
 }
@@ -27,7 +27,6 @@ function findRenderedCharacter() {
 
 describe('BlurryCharacterMode', () => {
   beforeEach(() => {
-    useGameSession.getState().start('blurryCharacter', 'easy');
     useProgression.getState().reset();
   });
 

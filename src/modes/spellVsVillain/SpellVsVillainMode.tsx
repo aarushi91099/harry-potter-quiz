@@ -20,15 +20,20 @@ interface Feedback {
   explanation: string;
 }
 
-export function SpellVsVillainMode({ difficulty }: { difficulty: Difficulty }) {
+export function SpellVsVillainMode() {
   const engine = useMemo(() => new QuestionEngine(spellScenarios), []);
-  const [currentScenario, setCurrentScenario] = useState(() => engine.next(difficulty));
+  const [currentScenario, setCurrentScenario] = useState(() => engine.nextAny());
   const [feedback, setFeedback] = useState<Feedback | null>(null);
-  const [remainingMs, setRemainingMs] = useState(TIME_LIMIT_MS_BY_DIFFICULTY[difficulty]);
+  const [remainingMs, setRemainingMs] = useState(TIME_LIMIT_MS_BY_DIFFICULTY.easy);
   const submitAnswer = useGameSession((s) => s.submitAnswer);
+  const start = useGameSession((s) => s.start);
   const startTimeRef = useRef(Date.now());
 
-  const timeLimitMs = TIME_LIMIT_MS_BY_DIFFICULTY[currentScenario?.difficulty ?? difficulty];
+  useEffect(() => {
+    start('spellVsVillain');
+  }, [start]);
+
+  const timeLimitMs = TIME_LIMIT_MS_BY_DIFFICULTY[currentScenario?.difficulty ?? 'easy'];
 
   useEffect(() => {
     if (feedback) return;
@@ -61,11 +66,11 @@ export function SpellVsVillainMode({ difficulty }: { difficulty: Difficulty }) {
 
   function handleNext() {
     setFeedback(null);
-    setCurrentScenario(engine.next(difficulty));
+    setCurrentScenario(engine.nextAny());
   }
 
   if (!currentScenario) {
-    return <p>No scenarios available at this difficulty yet.</p>;
+    return <p>No scenarios available.</p>;
   }
 
   return (

@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AnswerFeedback } from '../../components/AnswerFeedback';
 import { SessionHeader } from '../../components/SessionHeader';
 import { dialogues } from '../../data/dialogues';
 import { QuestionEngine } from '../../engine/QuestionEngine';
-import type { Attempt, Difficulty } from '../../engine/types';
+import type { Attempt } from '../../engine/types';
 import { answersMatch } from '../../lib/normalizeAnswer';
 import { useGameSession } from '../../store/useGameSession';
 
@@ -12,12 +12,17 @@ interface Feedback {
   fullDialogue: string;
 }
 
-export function FinishDialogueMode({ difficulty }: { difficulty: Difficulty }) {
+export function FinishDialogueMode() {
   const engine = useMemo(() => new QuestionEngine(dialogues), []);
-  const [currentDialogue, setCurrentDialogue] = useState(() => engine.next(difficulty));
+  const [currentDialogue, setCurrentDialogue] = useState(() => engine.nextAny());
   const [guess, setGuess] = useState('');
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const submitAnswer = useGameSession((s) => s.submitAnswer);
+  const start = useGameSession((s) => s.start);
+
+  useEffect(() => {
+    start('finishDialogue');
+  }, [start]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -36,11 +41,11 @@ export function FinishDialogueMode({ difficulty }: { difficulty: Difficulty }) {
   function handleNext() {
     setFeedback(null);
     setGuess('');
-    setCurrentDialogue(engine.next(difficulty));
+    setCurrentDialogue(engine.nextAny());
   }
 
   if (!currentDialogue) {
-    return <p>No dialogue lines available at this difficulty yet.</p>;
+    return <p>No dialogue lines available.</p>;
   }
 
   return (

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AnswerFeedback } from '../../components/AnswerFeedback';
 import { CharacterSearchSelect } from '../../components/CharacterSearchSelect';
 import { SessionHeader } from '../../components/SessionHeader';
@@ -6,7 +6,7 @@ import { characters } from '../../data/characters';
 import type { Character } from '../../data/types';
 import { ClueEngine } from '../../engine/ClueEngine';
 import { QuestionEngine } from '../../engine/QuestionEngine';
-import type { Attempt, Difficulty } from '../../engine/types';
+import type { Attempt } from '../../engine/types';
 import { useGameSession } from '../../store/useGameSession';
 import { buildCharacterClues } from './buildCharacterClues';
 
@@ -15,9 +15,9 @@ interface Feedback {
   characterName: string;
 }
 
-export function GuessCharacterMode({ difficulty }: { difficulty: Difficulty }) {
+export function GuessCharacterMode() {
   const engine = useMemo(() => new QuestionEngine(characters), []);
-  const [currentCharacter, setCurrentCharacter] = useState(() => engine.next(difficulty));
+  const [currentCharacter, setCurrentCharacter] = useState(() => engine.nextAny());
   const clueEngine = useMemo(
     () => (currentCharacter ? new ClueEngine(buildCharacterClues(currentCharacter)) : null),
     [currentCharacter],
@@ -25,6 +25,11 @@ export function GuessCharacterMode({ difficulty }: { difficulty: Difficulty }) {
   const [, forceRerender] = useState(0);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const submitAnswer = useGameSession((s) => s.submitAnswer);
+  const start = useGameSession((s) => s.start);
+
+  useEffect(() => {
+    start('guessCharacter');
+  }, [start]);
 
   function handleRevealNext() {
     clueEngine?.revealNext();
@@ -47,11 +52,11 @@ export function GuessCharacterMode({ difficulty }: { difficulty: Difficulty }) {
 
   function handleNext() {
     setFeedback(null);
-    setCurrentCharacter(engine.next(difficulty));
+    setCurrentCharacter(engine.nextAny());
   }
 
   if (!currentCharacter || !clueEngine) {
-    return <p>No characters available at this difficulty yet.</p>;
+    return <p>No characters available.</p>;
   }
 
   const clues = feedback ? buildCharacterClues(currentCharacter) : clueEngine.visibleClues;

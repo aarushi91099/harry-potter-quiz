@@ -6,7 +6,7 @@ import { creatures } from '../../data/creatures';
 import type { Creature } from '../../data/types';
 import { BlurEngine } from '../../engine/BlurEngine';
 import { QuestionEngine } from '../../engine/QuestionEngine';
-import type { Attempt, Difficulty } from '../../engine/types';
+import type { Attempt } from '../../engine/types';
 import { playCreatureTone } from '../../lib/creatureTone';
 import { useGameSession } from '../../store/useGameSession';
 
@@ -26,14 +26,19 @@ interface Feedback {
   description: string;
 }
 
-export function GuessCreatureMode({ difficulty }: { difficulty: Difficulty }) {
+export function GuessCreatureMode() {
   const engine = useMemo(() => new QuestionEngine(creatures), []);
-  const [currentCreature, setCurrentCreature] = useState(() => engine.next(difficulty));
+  const [currentCreature, setCurrentCreature] = useState(() => engine.nextAny());
   const [subMode, setSubMode] = useState<SubMode>('silhouette');
   const blurEngine = useMemo(() => new BlurEngine({ durationMs: BLUR_DURATION_MS }), [currentCreature]);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [, forceRerender] = useState(0);
   const submitAnswer = useGameSession((s) => s.submitAnswer);
+  const start = useGameSession((s) => s.start);
+
+  useEffect(() => {
+    start('guessCreature');
+  }, [start]);
 
   useEffect(() => {
     blurEngine.start();
@@ -59,11 +64,11 @@ export function GuessCreatureMode({ difficulty }: { difficulty: Difficulty }) {
 
   function handleNext() {
     setFeedback(null);
-    setCurrentCreature(engine.next(difficulty));
+    setCurrentCreature(engine.nextAny());
   }
 
   if (!currentCreature) {
-    return <p>No creatures available at this difficulty yet.</p>;
+    return <p>No creatures available.</p>;
   }
 
   const filter = feedback
