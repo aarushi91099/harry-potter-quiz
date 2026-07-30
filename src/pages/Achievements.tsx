@@ -5,8 +5,8 @@ export function Achievements() {
   const unlockedIds = useProgression((s) => s.unlockedAchievementIds);
 
   return (
-    <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Achievements</h1>
+    <div className="animate-fade-in-up flex flex-col gap-6">
+      <h1 className="font-magical text-3xl font-bold text-[var(--house-primary)]">Achievements</h1>
 
       <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {ACHIEVEMENTS.map((achievement) => {
@@ -14,19 +14,15 @@ export function Achievements() {
           return (
             <li
               key={achievement.id}
-              className={`rounded-xl border p-4 ${
-                unlocked
-                  ? 'border-[var(--house-primary)] bg-[var(--house-primary)]/10'
-                  : 'border-slate-200 opacity-60 dark:border-slate-700'
+              className={`hp-card rounded-xl border bg-[var(--bg-surface)] p-4 ${
+                unlocked ? 'border-[var(--gold)] [box-shadow:0_0_20px_-8px_var(--house-glow)]' : 'border-[var(--border-subtle)] opacity-60'
               }`}
             >
-              <div className="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-100">
-                <span>{unlocked ? '🏆' : '🔒'}</span>
+              <div className="font-display flex items-center gap-2 font-semibold text-[var(--text-primary)]">
+                <span aria-hidden="true">{unlocked ? '🏆' : '🔒'}</span>
                 {achievement.name}
               </div>
-              <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-                {achievement.description}
-              </p>
+              <p className="mt-1 text-sm text-[var(--text-secondary)]">{achievement.description}</p>
             </li>
           );
         })}

@@ -89,7 +89,7 @@ export function SearchSelect<T>({
           isOpen && results[highlightedIndex] ? `${listboxId}-${highlightedIndex}` : undefined
         }
         disabled={disabled}
-        className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-900 shadow-sm outline-none focus:border-[var(--house-primary)] focus:ring-2 focus:ring-[var(--house-primary)] disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+        className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-surface)] px-4 py-2 text-[var(--text-primary)] shadow-sm outline-none transition-shadow placeholder:text-[var(--text-muted)] focus:border-[var(--house-primary)] focus:ring-2 focus:ring-[var(--house-primary)] disabled:opacity-50"
         placeholder={placeholder}
         value={query}
         onChange={(e) => {
@@ -109,7 +109,7 @@ export function SearchSelect<T>({
         <ul
           id={listboxId}
           role="listbox"
-          className="absolute z-10 mt-1 max-h-72 w-full overflow-auto rounded-lg border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-900"
+          className="animate-pop-in absolute z-10 mt-1 max-h-72 w-full overflow-auto rounded-lg border border-[var(--border)] bg-[var(--bg-surface-raised)] shadow-lg shadow-black/40"
         >
           {results.map((item, index) => (
             <li
@@ -117,10 +117,10 @@ export function SearchSelect<T>({
               id={`${listboxId}-${index}`}
               role="option"
               aria-selected={index === highlightedIndex}
-              className={`flex cursor-pointer items-center gap-3 px-4 py-2 ${
+              className={`flex cursor-pointer items-center gap-3 px-4 py-2 transition-colors ${
                 index === highlightedIndex
-                  ? 'bg-[var(--house-primary)] text-white'
-                  : 'text-slate-900 dark:text-slate-100'
+                  ? 'bg-[var(--house-primary)] text-[#05060d]'
+                  : 'text-[var(--text-primary)] hover:bg-white/5'
               }`}
               onMouseDown={(e) => e.preventDefault()}
               onMouseEnter={() => setHighlightedIndex(index)}
@@ -141,7 +141,7 @@ export function SearchSelect<T>({
       )}
 
       {isOpen && debouncedQuery && results.length === 0 && (
-        <div className="absolute z-10 mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm text-slate-500 shadow-lg dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+        <div className="animate-pop-in absolute z-10 mt-1 w-full rounded-lg border border-[var(--border)] bg-[var(--bg-surface-raised)] px-4 py-2 text-sm text-[var(--text-muted)] shadow-lg shadow-black/40">
           No matches found.
         </div>
       )}

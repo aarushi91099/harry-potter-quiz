@@ -67,12 +67,11 @@ export function GuessCharacterMode() {
 
       <ul
         data-character-id={currentCharacter.id}
-        className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-900"
+        className="flex flex-col gap-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6"
       >
-        {clues.map((clue) => (
-          <li key={clue.category} className="text-slate-800 dark:text-slate-100">
-            <span className="font-medium text-slate-500 dark:text-slate-400">{clue.category}:</span>{' '}
-            {clue.value}
+        {clues.map((clue, i) => (
+          <li key={clue.category} className="animate-fade-in-up text-[var(--text-primary)]" style={{ animationDelay: `${i * 80}ms` }}>
+            <span className="font-medium text-[var(--gold-bright)]">{clue.category}:</span> {clue.value}
           </li>
         ))}
       </ul>
@@ -83,7 +82,7 @@ export function GuessCharacterMode() {
             <button
               type="button"
               onClick={handleRevealNext}
-              className="w-fit rounded-lg border border-slate-300 px-4 py-2 text-sm dark:border-slate-600"
+              className="hp-button w-fit rounded-lg border border-[var(--border)] px-4 py-2 text-sm text-[var(--text-secondary)]"
             >
               Reveal next clue
             </button>

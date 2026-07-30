@@ -89,10 +89,10 @@ export function GuessCreatureMode() {
             key={sm.id}
             type="button"
             onClick={() => setSubMode(sm.id)}
-            className={`rounded-lg border px-3 py-1.5 text-sm ${
+            className={`hp-button rounded-lg border px-3 py-1.5 text-sm ${
               subMode === sm.id
-                ? 'border-[var(--house-primary)] bg-[var(--house-primary)] text-white'
-                : 'border-slate-300 dark:border-slate-600'
+                ? 'border-[var(--house-primary)] bg-[var(--house-primary)] text-[#05060d]'
+                : 'border-[var(--border)] text-[var(--text-secondary)]'
             }`}
           >
             {sm.label}
@@ -101,14 +101,15 @@ export function GuessCreatureMode() {
       </div>
 
       <div
+        key={currentCreature.id}
         data-creature-id={currentCreature.id}
-        className="flex flex-col items-center gap-4 rounded-xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-900"
+        className="animate-pop-in flex flex-col items-center gap-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6"
       >
         {subMode === 'sound' && !feedback ? (
           <button
             type="button"
             onClick={() => playCreatureTone(currentCreature.id)}
-            className="flex h-32 w-32 items-center justify-center rounded-full border-2 border-dashed border-slate-400 text-4xl"
+            className="hp-button flex h-32 w-32 animate-pulse items-center justify-center rounded-full border-2 border-dashed border-[var(--house-primary)] text-4xl"
             aria-label="Play creature sound"
           >
             🔊
@@ -118,8 +119,8 @@ export function GuessCreatureMode() {
             src={currentCreature.imageUrl}
             alt="Mystery creature"
             loading="lazy"
-            className="h-32 w-32 rounded-full object-cover"
-            style={{ filter, transition: 'filter 150ms linear' }}
+            className="h-32 w-32 rounded-full object-cover ring-2 ring-[var(--house-primary)]/40"
+            style={{ filter, transition: 'filter 150ms linear', boxShadow: `0 0 32px -4px var(--house-glow)` }}
           />
         )}
       </div>

@@ -77,12 +77,23 @@ export function SpellVsVillainMode() {
     <div className="flex flex-col gap-6">
       <SessionHeader />
 
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-900">
-        <p className="text-lg text-slate-800 dark:text-slate-100">{currentScenario.prompt}</p>
+      <div
+        key={currentScenario.id}
+        className="animate-pop-in rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6"
+      >
+        <p className="text-lg text-[var(--text-primary)]">{currentScenario.prompt}</p>
         {!feedback && (
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            Time remaining: {Math.ceil(remainingMs / 1000)}s
-          </p>
+          <div className="mt-3">
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-[var(--house-primary)] transition-[width] duration-200 ease-linear"
+                style={{ width: `${(remainingMs / timeLimitMs) * 100}%` }}
+              />
+            </div>
+            <p className="mt-1.5 text-sm text-[var(--text-muted)]">
+              Time remaining: {Math.ceil(remainingMs / 1000)}s
+            </p>
+          </div>
         )}
       </div>
 
@@ -93,7 +104,7 @@ export function SpellVsVillainMode() {
               key={spell.id}
               type="button"
               onClick={() => handleSelect(spell)}
-              className="rounded-lg border border-slate-300 px-3 py-2 text-sm hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-800"
+              className="hp-button rounded-lg border border-[var(--border)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]"
             >
               {spell.name}
             </button>

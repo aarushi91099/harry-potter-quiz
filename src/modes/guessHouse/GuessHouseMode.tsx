@@ -8,6 +8,13 @@ import { useGameSession } from '../../store/useGameSession';
 
 const HOUSES: HouseName[] = ['Gryffindor', 'Ravenclaw', 'Hufflepuff', 'Slytherin'];
 
+const HOUSE_COLOR: Record<HouseName, string> = {
+  Gryffindor: '#e0263f',
+  Ravenclaw: '#3b5bdb',
+  Hufflepuff: '#ecc94b',
+  Slytherin: '#2f9e56',
+};
+
 interface Feedback {
   correct: boolean;
   correctHouse: HouseName;
@@ -55,7 +62,10 @@ export function GuessHouseMode() {
     <div className="flex flex-col gap-6">
       <SessionHeader />
 
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-6 text-lg text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
+      <div
+        key={currentScenario.id}
+        className="animate-pop-in rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 text-lg text-[var(--text-primary)]"
+      >
         {currentScenario.prompt}
       </div>
 
@@ -66,7 +76,8 @@ export function GuessHouseMode() {
               key={house}
               type="button"
               onClick={() => handleSelect(house)}
-              className="rounded-lg border border-slate-300 px-3 py-3 font-medium hover:bg-slate-100 dark:border-slate-600 dark:hover:bg-slate-800"
+              style={{ borderColor: `${HOUSE_COLOR[house]}55` }}
+              className="hp-button rounded-lg border bg-[var(--bg-surface)] px-3 py-3 font-medium text-[var(--text-primary)] hover:bg-white/5"
             >
               {house}
             </button>

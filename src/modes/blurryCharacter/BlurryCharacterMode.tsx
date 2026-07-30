@@ -67,14 +67,21 @@ export function BlurryCharacterMode() {
     <div className="flex flex-col gap-6">
       <SessionHeader />
 
-      <div className="flex justify-center rounded-xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-900">
+      <div
+        key={currentCharacter.id}
+        className="animate-pop-in flex justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6"
+      >
         <img
           src={currentCharacter.imageUrl}
           alt="Mystery character"
           loading="lazy"
           data-character-id={currentCharacter.id}
-          className="h-48 w-48 rounded-full object-cover"
-          style={{ filter: `blur(${blurPx}px)`, transition: 'filter 150ms linear' }}
+          className="h-48 w-48 rounded-full object-cover ring-2 ring-[var(--house-primary)]/40"
+          style={{
+            filter: `blur(${blurPx}px)`,
+            transition: 'filter 150ms linear',
+            boxShadow: `0 0 32px -4px var(--house-glow)`,
+          }}
         />
       </div>
 

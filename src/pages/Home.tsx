@@ -3,23 +3,31 @@ import { modeCatalog } from '../data/modeCatalog';
 
 export function Home() {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="animate-fade-in-up flex flex-col gap-6">
       <div>
-        <h1 className="text-3xl font-bold text-[var(--house-primary)]">Hogwarts Trivia</h1>
-        <p className="mt-1 text-slate-600 dark:text-slate-400">
+        <h1 className="font-magical text-4xl font-bold text-[var(--house-primary)] drop-shadow-[0_0_16px_var(--house-glow)]">
+          Hogwarts Trivia
+        </h1>
+        <p className="mt-2 text-[var(--text-secondary)]">
           Pick a quiz mode to test your knowledge of the wizarding world.
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {modeCatalog.map((mode) => (
+        {modeCatalog.map((mode, i) => (
           <Link
             key={mode.id}
             to={`/play/${mode.id}`}
-            className="rounded-xl border border-slate-200 p-4 transition-shadow hover:shadow-md dark:border-slate-700"
+            style={{ animationDelay: `${i * 60}ms` }}
+            className="hp-card animate-fade-in-up flex gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4"
           >
-            <h2 className="font-semibold text-slate-900 dark:text-slate-100">{mode.name}</h2>
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">{mode.description}</p>
+            <span className="text-2xl" aria-hidden="true">
+              {mode.icon}
+            </span>
+            <div>
+              <h2 className="font-semibold text-[var(--text-primary)]">{mode.name}</h2>
+              <p className="mt-1 text-sm text-[var(--text-secondary)]">{mode.description}</p>
+            </div>
           </Link>
         ))}
       </div>

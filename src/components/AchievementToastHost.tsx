@@ -26,18 +26,20 @@ function ToastItem({ toast, dismiss }: { toast: Toast; dismiss: (id: string) => 
   return (
     <div
       role="status"
-      className="pointer-events-auto flex items-center gap-3 rounded-lg border border-[var(--house-primary)] bg-white px-4 py-3 shadow-lg dark:bg-slate-900"
+      className="animate-toast-in pointer-events-auto flex items-center gap-3 rounded-lg border border-[var(--gold)] bg-[var(--bg-surface-raised)] px-4 py-3 shadow-lg shadow-black/50 [box-shadow:0_0_24px_-4px_var(--house-glow)]"
     >
-      <span className="text-2xl">🏆</span>
+      <span className="text-2xl" aria-hidden="true">
+        🏆
+      </span>
       <div>
-        <p className="font-semibold text-slate-900 dark:text-slate-100">Achievement Unlocked!</p>
-        <p className="text-sm text-slate-600 dark:text-slate-400">{toast.achievement.name}</p>
+        <p className="font-display font-semibold text-[var(--gold-bright)]">Achievement Unlocked!</p>
+        <p className="text-sm text-[var(--text-secondary)]">{toast.achievement.name}</p>
       </div>
       <button
         type="button"
         onClick={() => dismiss(toast.id)}
         aria-label="Dismiss"
-        className="ml-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+        className="ml-2 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
       >
         ✕
       </button>

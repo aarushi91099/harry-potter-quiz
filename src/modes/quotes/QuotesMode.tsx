@@ -82,15 +82,19 @@ export function QuotesMode() {
     <div className="flex flex-col gap-6">
       <SessionHeader />
 
-      <blockquote className="rounded-xl border border-slate-200 bg-slate-50 p-6 text-xl italic text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
+      <blockquote
+        key={currentQuote.id}
+        className="animate-pop-in rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 font-display text-xl text-[var(--text-primary)] italic"
+      >
         "{currentQuote.text}"
       </blockquote>
 
       {visibleClues.length > 0 && !feedback && (
-        <ul className="flex flex-col gap-1 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm dark:border-amber-900 dark:bg-amber-950">
+        <ul className="animate-pop-in flex flex-col gap-1 rounded-xl border border-[var(--gold)]/40 bg-[var(--gold)]/10 p-4 text-sm">
           {visibleClues.map((clue) => (
-            <li key={clue.category} className="text-amber-900 dark:text-amber-200">
-              <span className="font-medium">{clue.category}:</span> {clue.value}
+            <li key={clue.category} className="text-[var(--gold-bright)]">
+              <span className="font-medium">{clue.category}:</span>{' '}
+              <span className="text-[var(--text-primary)]">{clue.value}</span>
             </li>
           ))}
         </ul>

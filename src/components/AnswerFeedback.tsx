@@ -15,26 +15,29 @@ export function AnswerFeedback({ correct, children, onNext, nextLabel = 'Next qu
 
   return (
     <div
-      className={`rounded-xl p-4 ${
+      className={`animate-pop-in rounded-xl border p-4 ${
         correct
-          ? 'bg-green-100 text-green-900 dark:bg-green-950 dark:text-green-200'
-          : 'bg-red-100 text-red-900 dark:bg-red-950 dark:text-red-200'
+          ? 'border-[var(--success-border)] bg-[var(--success-bg)] text-[var(--success)]'
+          : 'border-[var(--danger-border)] bg-[var(--danger-bg)] text-[var(--danger)]'
       }`}
     >
-      <p className="font-semibold">{correct ? 'Correct!' : 'Not quite.'}</p>
-      <div className="mt-1">{children}</div>
+      <p className="font-display flex items-center gap-2 text-lg font-semibold">
+        <span aria-hidden="true">{correct ? '✨' : '🪄'}</span>
+        {correct ? 'Correct!' : 'Not quite.'}
+      </p>
+      <div className="mt-1 text-[var(--text-primary)]">{children}</div>
       <div className="mt-4 flex gap-3">
         <button
           type="button"
           onClick={onNext}
-          className="rounded-lg bg-[var(--house-primary)] px-4 py-2 text-white"
+          className="hp-button rounded-lg bg-[var(--house-primary)] px-4 py-2 font-medium text-[#05060d]"
         >
           {nextLabel}
         </button>
         <button
           type="button"
           onClick={() => navigate('/results')}
-          className="rounded-lg border border-slate-300 px-4 py-2 dark:border-slate-600"
+          className="hp-button rounded-lg border border-[var(--border)] px-4 py-2 text-[var(--text-secondary)]"
         >
           Finish & see results
         </button>

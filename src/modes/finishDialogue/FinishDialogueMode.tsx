@@ -52,7 +52,10 @@ export function FinishDialogueMode() {
     <div className="flex flex-col gap-6">
       <SessionHeader />
 
-      <blockquote className="rounded-xl border border-slate-200 bg-slate-50 p-6 text-xl italic text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
+      <blockquote
+        key={currentDialogue.id}
+        className="animate-pop-in rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 font-display text-xl text-[var(--text-primary)] italic"
+      >
         "{currentDialogue.partial}"
       </blockquote>
 
@@ -64,12 +67,12 @@ export function FinishDialogueMode() {
             onChange={(e) => setGuess(e.target.value)}
             placeholder="Fill in the missing word(s)…"
             aria-label="Your answer"
-            className="w-full max-w-md rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-[var(--house-primary)] focus:ring-2 focus:ring-[var(--house-primary)] dark:border-slate-700 dark:bg-slate-900"
+            className="w-full max-w-md rounded-lg border border-[var(--border)] bg-[var(--bg-surface)] px-4 py-2 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none focus:border-[var(--house-primary)] focus:ring-2 focus:ring-[var(--house-primary)]"
           />
           <button
             type="submit"
             disabled={!guess.trim()}
-            className="rounded-lg bg-[var(--house-primary)] px-4 py-2 text-white disabled:opacity-50"
+            className="hp-button rounded-lg bg-[var(--house-primary)] px-4 py-2 font-medium text-[#05060d] disabled:opacity-50"
           >
             Submit
           </button>

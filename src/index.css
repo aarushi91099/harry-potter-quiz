@@ -1,51 +1,214 @@
 @import "tailwindcss";
 
-/* Manual dark-mode toggle: apply the `dark` class on <html> to activate,
-   independent of the OS `prefers-color-scheme` setting. */
-@custom-variant dark (&:where(.dark, .dark *));
+/*
+ * Hogwarts Trivia — single dark theme (no light mode).
+ * Palette: deep night-sky navy base, warm gold accents, parchment text.
+ * House selection (see HouseThemeWrapper) overrides --house-* below.
+ */
 
 :root {
-  --house-primary: #5d5d5d;
-  --house-secondary: #939393;
-  --house-accent: #ffffff;
-
-  color-scheme: light dark;
-}
-
-:root.dark {
   color-scheme: dark;
+
+  --bg-void: #05060d;
+  --bg-base: #0a0e1a;
+  --bg-surface: #131a2e;
+  --bg-surface-raised: #1a2340;
+
+  --border-subtle: rgba(212, 175, 55, 0.16);
+  --border: rgba(212, 175, 55, 0.32);
+
+  --text-primary: #f2ead8;
+  --text-secondary: #b9c0d9;
+  --text-muted: #7d86a3;
+
+  --gold: #d3a625;
+  --gold-bright: #f0c75e;
+
+  --success: #34d399;
+  --success-bg: rgba(52, 211, 153, 0.12);
+  --success-border: rgba(52, 211, 153, 0.35);
+  --danger: #f87171;
+  --danger-bg: rgba(248, 113, 113, 0.12);
+  --danger-border: rgba(248, 113, 113, 0.35);
+
+  /* Default (no house chosen): Hogwarts gold. */
+  --house-primary: var(--gold);
+  --house-secondary: var(--gold-bright);
+  --house-accent: #f2ead8;
+  --house-glow: rgba(211, 166, 37, 0.35);
 }
 
-/* Hogwarts house color themes, applied via a `house-<name>` class
-   on a wrapping element (see components/HouseThemeWrapper). */
+/* House color themes, applied via a `house-<name>` class on a wrapping element
+   (see components/HouseThemeWrapper). Primaries are brightened versions of each
+   house's canon color so they stay legible as interactive accents on a dark UI. */
 .house-gryffindor {
-  --house-primary: #740001;
+  --house-primary: #e0263f;
   --house-secondary: #d3a625;
-  --house-accent: #ae0001;
+  --house-accent: #f0c75e;
+  --house-glow: rgba(224, 38, 63, 0.35);
 }
 
 .house-ravenclaw {
-  --house-primary: #0e1a40;
-  --house-secondary: #946b2d;
-  --house-accent: #222f5b;
+  --house-primary: #3b5bdb;
+  --house-secondary: #b08d57;
+  --house-accent: #8fa3ff;
+  --house-glow: rgba(59, 91, 219, 0.35);
 }
 
 .house-hufflepuff {
-  --house-primary: #ecb939;
+  --house-primary: #ecc94b;
   --house-secondary: #372e29;
   --house-accent: #f0c75e;
+  --house-glow: rgba(236, 201, 75, 0.35);
 }
 
 .house-slytherin {
-  --house-primary: #1a472a;
-  --house-secondary: #aaaaaa;
-  --house-accent: #2a623d;
+  --house-primary: #2f9e56;
+  --house-secondary: #c0c0c0;
+  --house-accent: #67e08a;
+  --house-glow: rgba(47, 158, 86, 0.35);
 }
 
 body {
-  @apply bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+  @apply antialiased;
+  background-color: var(--bg-base);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(211, 166, 37, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(59, 91, 219, 0.08), transparent);
+  background-attachment: fixed;
+  color: var(--text-primary);
 }
 
 #root {
   min-height: 100svh;
+  position: relative;
+}
+
+.font-magical {
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+}
+
+.font-display {
+  font-family: 'Cinzel', serif;
+}
+
+/* Faint, cheap starfield: one fixed layer, no JS, tiled radial-gradient dots that gently twinkle. */
+.starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.6;
+  background-repeat: repeat;
+  background-size: 240px 240px;
+  background-image:
+    radial-gradient(1.4px 1.4px at 12% 22%, rgba(242, 234, 216, 0.9), transparent),
+    radial-gradient(1px 1px at 78% 14%, rgba(242, 234, 216, 0.7), transparent),
+    radial-gradient(1.6px 1.6px at 52% 62%, rgba(242, 234, 216, 0.8), transparent),
+    radial-gradient(1px 1px at 30% 82%, rgba(242, 234, 216, 0.6), transparent),
+    radial-gradient(1.2px 1.2px at 68% 74%, rgba(242, 234, 216, 0.7), transparent),
+    radial-gradient(1.6px 1.6px at 92% 42%, rgba(242, 234, 216, 0.6), transparent),
+    radial-gradient(1px 1px at 20% 48%, rgba(242, 234, 216, 0.5), transparent),
+    radial-gradient(1.2px 1.2px at 60% 28%, rgba(242, 234, 216, 0.7), transparent);
+  animation: twinkle 5s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out both;
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-pop-in {
+  animation: pop-in 0.25s ease-out both;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+.animate-toast-in {
+  animation: toast-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Shared "magical card" hover treatment: lift + gold glow, keyed to the active house color. */
+.hp-card {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+.hp-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--house-primary);
+  box-shadow: 0 10px 28px -12px var(--house-glow);
+}
+
+.hp-button {
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+.hp-button:hover:not(:disabled) {
+  filter: brightness(1.08);
+  box-shadow: 0 0 0 3px var(--house-glow);
+}
+.hp-button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .starfield,
+  .animate-fade-in-up,
+  .animate-pop-in,
+  .animate-toast-in,
+  .hp-card,
+  .hp-button {
+    animation: none !important;
+    transition: none !important;
+  }
 }

@@ -16,8 +16,8 @@ export function Results() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Session Results</h1>
+    <div className="animate-fade-in-up flex flex-col gap-6">
+      <h1 className="font-magical text-3xl font-bold text-[var(--house-primary)]">Session Results</h1>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <Stat label="Score" value={session.score} />
@@ -33,18 +33,18 @@ export function Results() {
             placeholder="Your name for the local leaderboard"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="rounded-lg border border-slate-300 px-3 py-2 dark:border-slate-600 dark:bg-slate-900"
+            className="rounded-lg border border-[var(--border)] bg-[var(--bg-surface)] px-3 py-2 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:border-[var(--house-primary)] focus:ring-2 focus:ring-[var(--house-primary)] focus:outline-none"
           />
           <button
             type="button"
             onClick={handleSave}
-            className="rounded-lg bg-[var(--house-primary)] px-4 py-2 text-white"
+            className="hp-button rounded-lg bg-[var(--house-primary)] px-4 py-2 font-medium text-[#05060d]"
           >
             Save to local leaderboard
           </button>
         </div>
       ) : (
-        <p className="text-green-700 dark:text-green-400">Saved to your local leaderboard!</p>
+        <p className="text-[var(--success)]">✨ Saved to your local leaderboard!</p>
       )}
 
       <Link to="/" className="w-fit text-[var(--house-primary)] underline">
@@ -56,9 +56,9 @@ export function Results() {
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-xl border border-slate-200 p-4 text-center dark:border-slate-700">
-      <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{value}</div>
-      <div className="text-sm text-slate-500 dark:text-slate-400">{label}</div>
+    <div className="hp-card rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 text-center">
+      <div className="font-display text-2xl font-bold text-[var(--gold-bright)]">{value}</div>
+      <div className="text-sm text-[var(--text-secondary)]">{label}</div>
     </div>
   );
 }
