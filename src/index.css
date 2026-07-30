@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+/* Manual dark-mode toggle: apply the `dark` class on <html> to activate,
+   independent of the OS `prefers-color-scheme` setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --house-primary: #5d5d5d;
+  --house-secondary: #939393;
+  --house-accent: #ffffff;
+
+  color-scheme: light dark;
+}
+
+:root.dark {
+  color-scheme: dark;
+}
+
+/* Hogwarts house color themes, applied via a `house-<name>` class
+   on a wrapping element (see components/HouseThemeWrapper). */
+.house-gryffindor {
+  --house-primary: #740001;
+  --house-secondary: #d3a625;
+  --house-accent: #ae0001;
+}
+
+.house-ravenclaw {
+  --house-primary: #0e1a40;
+  --house-secondary: #946b2d;
+  --house-accent: #222f5b;
+}
+
+.house-hufflepuff {
+  --house-primary: #ecb939;
+  --house-secondary: #372e29;
+  --house-accent: #f0c75e;
+}
+
+.house-slytherin {
+  --house-primary: #1a472a;
+  --house-secondary: #aaaaaa;
+  --house-accent: #2a623d;
+}
+
+body {
+  @apply bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+}
+
+#root {
+  min-height: 100svh;
+}
