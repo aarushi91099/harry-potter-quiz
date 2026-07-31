@@ -76,8 +76,17 @@ body {
   @apply antialiased;
   background-color: var(--bg-base);
   background-image:
+    linear-gradient(to bottom, rgba(5, 6, 13, 0.72), rgba(5, 6, 13, 0.5) 45%, rgba(5, 6, 13, 0.88)),
     radial-gradient(ellipse 80% 50% at 50% -10%, rgba(211, 166, 37, 0.08), transparent),
-    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(59, 91, 219, 0.08), transparent);
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(59, 91, 219, 0.08), transparent),
+    url('/castle.png');
+  background-size: auto, auto, auto, cover;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    center;
+  background-repeat: no-repeat;
   background-attachment: fixed;
   color: var(--text-primary);
 }
@@ -208,17 +217,15 @@ body {
 }
 
 /* Hero banner: castle skyline silhouette with a dark vignette so gold title text stays legible. */
+/* Translucent glass panel so the page's castle backdrop shows through, with just
+   enough of a dark wash for the gold title text to stay legible. */
 .hp-hero {
   position: relative;
   overflow: hidden;
   border-radius: 1rem;
   border: 1px solid var(--border-subtle);
-  background:
-    linear-gradient(to bottom, rgba(5, 6, 13, 0.65), rgba(5, 6, 13, 0.25) 55%, rgba(5, 6, 13, 0.8)),
-    url('/castle.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: linear-gradient(to bottom, rgba(5, 6, 13, 0.35), rgba(5, 6, 13, 0.55));
+  backdrop-filter: blur(1px);
 }
 
 .hp-sparkle {
