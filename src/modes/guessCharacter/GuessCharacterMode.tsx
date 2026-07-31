@@ -14,7 +14,10 @@ import {
   type AttributeStatus,
 } from './characterAttributes';
 
+const MIN_GUESSES_FOR_REVEAL = 5;
+
 interface Feedback {
+  correct: boolean;
   characterName: string;
   guessCount: number;
 }
@@ -58,8 +61,10 @@ export function GuessCharacterMode() {
     start('guessCharacter');
   }, [start]);
 
+  const guessedIds = useMemo(() => new Set(guesses.map((g) => g.id)), [guesses]);
+
   function handleSelect(character: Character) {
-    if (!currentCharacter || feedback) return;
+    if (!currentCharacter || feedback || guessedIds.has(character.id)) return;
     const nextGuesses = [...guesses, character];
     setGuesses(nextGuesses);
 
@@ -72,8 +77,21 @@ export function GuessCharacterMode() {
         context: { guessCount: nextGuesses.length },
       };
       submitAnswer(attempt);
-      setFeedback({ characterName: currentCharacter.name, guessCount: nextGuesses.length });
+      setFeedback({ correct: true, characterName: currentCharacter.name, guessCount: nextGuesses.length });
     }
+  }
+
+  function handleReveal() {
+    if (!currentCharacter || feedback || guesses.length < MIN_GUESSES_FOR_REVEAL) return;
+    const attempt: Attempt = {
+      mode: 'guessCharacter',
+      questionId: currentCharacter.id,
+      difficulty: currentCharacter.difficulty,
+      correct: false,
+      context: { guessCount: guesses.length },
+    };
+    submitAnswer(attempt);
+    setFeedback({ correct: false, characterName: currentCharacter.name, guessCount: guesses.length });
   }
 
   function handleNext() {
@@ -97,7 +115,8 @@ export function GuessCharacterMode() {
         <div className="mb-3 flex items-start justify-between gap-3">
           <p className="text-sm text-[var(--text-secondary)]">
             Guess a character to see how their traits compare to the mystery witch or wizard. Keep guessing —
-            there's no limit — until you find the match.
+            there's no limit — until you find the match, or reveal the answer after {MIN_GUESSES_FOR_REVEAL}{' '}
+            tries.
           </p>
           <button
             type="button"
@@ -163,13 +182,32 @@ export function GuessCharacterMode() {
         </div>
       </div>
 
-      {!feedback && <CharacterSearchSelect onSelect={handleSelect} />}
+      {!feedback && (
+        <div className="flex flex-wrap items-center gap-3">
+          <CharacterSearchSelect onSelect={handleSelect} excludeIds={guessedIds} />
+          <button
+            type="button"
+            onClick={handleReveal}
+            disabled={guesses.length < MIN_GUESSES_FOR_REVEAL}
+            title={
+              guesses.length < MIN_GUESSES_FOR_REVEAL
+                ? `Available after ${MIN_GUESSES_FOR_REVEAL} guesses`
+                : undefined
+            }
+            className="hp-button rounded-lg border border-[var(--border)] px-4 py-2 text-sm text-[var(--text-secondary)] disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Reveal answer
+          </button>
+        </div>
+      )}
 
       {feedback && (
-        <AnswerFeedback correct onNext={handleNext} nextLabel="Next character">
+        <AnswerFeedback correct={feedback.correct} onNext={handleNext} nextLabel="Next character">
           <p>
-            It was <strong>{feedback.characterName}</strong> — solved in {feedback.guessCount} guess
-            {feedback.guessCount === 1 ? '' : 'es'}.
+            It was <strong>{feedback.characterName}</strong>
+            {feedback.correct
+              ? ` — solved in ${feedback.guessCount} guess${feedback.guessCount === 1 ? '' : 'es'}.`
+              : '.'}
           </p>
         </AnswerFeedback>
       )}

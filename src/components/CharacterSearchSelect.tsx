@@ -5,14 +5,19 @@ import { SearchSelect } from './SearchSelect';
 export interface CharacterSearchSelectProps {
   onSelect: (character: Character) => void;
   disabled?: boolean;
+  /** Character ids to hide from results, e.g. ones already guessed this round. */
+  excludeIds?: ReadonlySet<string>;
 }
 
 /** Full-catalog searchable character picker, shared by every character-identification quiz mode. */
-export function CharacterSearchSelect({ onSelect, disabled }: CharacterSearchSelectProps) {
+export function CharacterSearchSelect({ onSelect, disabled, excludeIds }: CharacterSearchSelectProps) {
   return (
     <SearchSelect
       items={characters}
-      search={(query) => characterSearchIndex.search(query, 8)}
+      search={(query) => {
+        const results = characterSearchIndex.search(query, 8);
+        return excludeIds ? results.filter((c) => !excludeIds.has(c.id)) : results;
+      }}
       getId={(c) => c.id}
       getLabel={(c) => c.name}
       getImageUrl={(c) => c.imageUrl}

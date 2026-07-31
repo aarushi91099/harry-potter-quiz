@@ -86,4 +86,56 @@ describe('GuessCharacterMode', () => {
     expect(screen.getByText(target.name, { selector: 'strong' })).toBeInTheDocument();
     expect(useGameSession.getState().lastResult?.attempt.context?.guessCount).toBe(2);
   });
+
+  it('does not offer an already-guessed character again, and guessCount does not double-count it', async () => {
+    const user = userEvent.setup();
+    renderMode();
+    const target = findTargetCharacter();
+    const wrong = [...charactersById.values()].find((c) => c.id !== target.id)!;
+
+    await guess(user, wrong.name);
+    await user.type(screen.getByRole('combobox'), wrong.name);
+    expect(screen.queryByRole('option', { name: wrong.name })).not.toBeInTheDocument();
+
+    await user.clear(screen.getByRole('combobox'));
+    await guess(user, target.name);
+
+    expect(await screen.findByText('Correct!')).toBeInTheDocument();
+    expect(useGameSession.getState().lastResult?.attempt.context?.guessCount).toBe(2);
+  });
+
+  it('keeps the reveal-answer button disabled before 5 guesses', async () => {
+    const user = userEvent.setup();
+    renderMode();
+    const target = findTargetCharacter();
+    const wrongCharacters = [...charactersById.values()].filter((c) => c.id !== target.id).slice(0, 4);
+
+    expect(screen.getByRole('button', { name: 'Reveal answer' })).toBeDisabled();
+
+    for (const wrong of wrongCharacters) {
+      await guess(user, wrong.name);
+    }
+
+    expect(screen.getByRole('button', { name: 'Reveal answer' })).toBeDisabled();
+  });
+
+  it('enables the reveal-answer button after 5 guesses and reveals the character as incorrect', async () => {
+    const user = userEvent.setup();
+    renderMode();
+    const target = findTargetCharacter();
+    const wrongCharacters = [...charactersById.values()].filter((c) => c.id !== target.id).slice(0, 5);
+
+    for (const wrong of wrongCharacters) {
+      await guess(user, wrong.name);
+    }
+
+    const revealButton = screen.getByRole('button', { name: 'Reveal answer' });
+    expect(revealButton).toBeEnabled();
+    await user.click(revealButton);
+
+    expect(await screen.findByText('Not quite.')).toBeInTheDocument();
+    expect(screen.getByText(target.name, { selector: 'strong' })).toBeInTheDocument();
+    expect(useGameSession.getState().lastResult?.attempt.correct).toBe(false);
+    expect(useGameSession.getState().score).toBe(0);
+  });
 });
