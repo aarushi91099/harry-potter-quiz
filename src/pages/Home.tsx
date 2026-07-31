@@ -34,24 +34,21 @@ export function Home() {
             key={mode.id}
             to={`/play/${mode.id}`}
             style={{ animationDelay: `${i * 60}ms` }}
-            className="hp-card hp-ornate-card animate-fade-in-up flex flex-col gap-3 rounded-xl border border-[var(--border)] p-5"
+            className="hp-card hp-ornate-card animate-fade-in-up flex items-center gap-4 rounded-xl border border-[var(--border)] p-4"
           >
             <span className="hp-corner hp-corner-tl" aria-hidden="true" />
             <span className="hp-corner hp-corner-tr" aria-hidden="true" />
             <span className="hp-corner hp-corner-bl" aria-hidden="true" />
             <span className="hp-corner hp-corner-br" aria-hidden="true" />
 
-            <div className="flex gap-4">
-              <span className="hp-medallion" aria-hidden="true">
-                <span className="text-2xl">{mode.icon}</span>
-              </span>
-              <div className="min-w-0">
-                <h2 className="font-display text-lg font-semibold text-[var(--house-primary)]">{mode.name}</h2>
-                <p className="mt-1 text-sm text-[var(--text-secondary)]">{mode.description}</p>
-              </div>
+            <span className="hp-medallion shrink-0" aria-hidden="true">
+              <img src={mode.image} alt="" className="h-full w-full rounded-full object-cover" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <h2 className="font-display text-lg font-semibold text-[var(--house-primary)]">{mode.name}</h2>
+              <p className="mt-1 text-sm text-[var(--text-secondary)]">{mode.description}</p>
+              <OrnateDivider className="mt-2 max-w-[200px] opacity-70" />
             </div>
-
-            <OrnateDivider className="mt-1 max-w-[220px] opacity-70" />
           </Link>
         ))}
       </div>
