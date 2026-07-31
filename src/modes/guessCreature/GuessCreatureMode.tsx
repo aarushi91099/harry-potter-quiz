@@ -4,21 +4,11 @@ import { CreatureSearchSelect } from '../../components/CreatureSearchSelect';
 import { SessionHeader } from '../../components/SessionHeader';
 import { creatures } from '../../data/creatures';
 import type { Creature } from '../../data/types';
-import { BlurEngine } from '../../engine/BlurEngine';
 import { QuestionEngine } from '../../engine/QuestionEngine';
 import type { Attempt } from '../../engine/types';
-import { playCreatureTone } from '../../lib/creatureTone';
 import { useGameSession } from '../../store/useGameSession';
 
-const BLUR_DURATION_MS = 15_000;
-
-type SubMode = 'silhouette' | 'blurry' | 'sound';
-
-const SUB_MODES: { id: SubMode; label: string }[] = [
-  { id: 'silhouette', label: 'Silhouette' },
-  { id: 'blurry', label: 'Blurry' },
-  { id: 'sound', label: 'Sound' },
-];
+const MAX_ATTEMPTS = 2;
 
 interface Feedback {
   correct: boolean;
@@ -26,13 +16,15 @@ interface Feedback {
   description: string;
 }
 
+function creatureImagePath(variant: 'black_silhouette' | 'silhouette' | 'creatures', id: string) {
+  return `/creature-images/${variant}/${id}.png`;
+}
+
 export function GuessCreatureMode() {
   const engine = useMemo(() => new QuestionEngine(creatures), []);
   const [currentCreature, setCurrentCreature] = useState(() => engine.nextAny());
-  const [subMode, setSubMode] = useState<SubMode>('silhouette');
-  const blurEngine = useMemo(() => new BlurEngine({ durationMs: BLUR_DURATION_MS }), [currentCreature]);
+  const [wrongGuesses, setWrongGuesses] = useState<Creature[]>([]);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
-  const [, forceRerender] = useState(0);
   const submitAnswer = useGameSession((s) => s.submitAnswer);
   const start = useGameSession((s) => s.start);
 
@@ -40,30 +32,42 @@ export function GuessCreatureMode() {
     start('guessCreature');
   }, [start]);
 
-  useEffect(() => {
-    blurEngine.start();
-    if (feedback) return;
-    const interval = setInterval(() => forceRerender((n) => n + 1), 100);
-    return () => clearInterval(interval);
-  }, [blurEngine, feedback]);
-
   function handleSelect(creature: Creature) {
     if (!currentCreature || feedback) return;
-    const earliness = blurEngine.earlinessAt();
-    const correct = creature.id === currentCreature.id;
-    const attempt: Attempt = {
-      mode: 'guessCreature',
-      questionId: currentCreature.id,
-      difficulty: currentCreature.difficulty,
-      correct,
-      context: { earliness },
-    };
-    submitAnswer(attempt);
-    setFeedback({ correct, creatureName: currentCreature.name, description: currentCreature.description });
+
+    if (creature.id === currentCreature.id) {
+      const earliness = 1 - wrongGuesses.length / MAX_ATTEMPTS;
+      const attempt: Attempt = {
+        mode: 'guessCreature',
+        questionId: currentCreature.id,
+        difficulty: currentCreature.difficulty,
+        correct: true,
+        context: { earliness },
+      };
+      submitAnswer(attempt);
+      setFeedback({ correct: true, creatureName: currentCreature.name, description: currentCreature.description });
+      return;
+    }
+
+    const nextWrongGuesses = [...wrongGuesses, creature];
+    setWrongGuesses(nextWrongGuesses);
+
+    if (nextWrongGuesses.length >= MAX_ATTEMPTS) {
+      const attempt: Attempt = {
+        mode: 'guessCreature',
+        questionId: currentCreature.id,
+        difficulty: currentCreature.difficulty,
+        correct: false,
+        context: { earliness: 0 },
+      };
+      submitAnswer(attempt);
+      setFeedback({ correct: false, creatureName: currentCreature.name, description: currentCreature.description });
+    }
   }
 
   function handleNext() {
     setFeedback(null);
+    setWrongGuesses([]);
     setCurrentCreature(engine.nextAny());
   }
 
@@ -71,59 +75,45 @@ export function GuessCreatureMode() {
     return <p>No creatures available.</p>;
   }
 
-  const filter = feedback
-    ? 'none'
-    : subMode === 'silhouette'
-      ? 'brightness(0)'
-      : subMode === 'blurry'
-        ? `blur(${blurEngine.blurPxAt()}px)`
-        : 'none';
+  const attemptsUsed = wrongGuesses.length;
+  const imageVariant = feedback ? 'creatures' : attemptsUsed === 0 ? 'black_silhouette' : 'silhouette';
+  const imageSrc = creatureImagePath(imageVariant, currentCreature.id);
 
   return (
     <div className="flex flex-col gap-6">
       <SessionHeader />
 
-      <div className="flex gap-2">
-        {SUB_MODES.map((sm) => (
-          <button
-            key={sm.id}
-            type="button"
-            onClick={() => setSubMode(sm.id)}
-            className={`hp-button rounded-lg border px-3 py-1.5 text-sm ${
-              subMode === sm.id
-                ? 'border-[var(--house-primary)] bg-[var(--house-primary)] text-[#05060d]'
-                : 'border-[var(--border)] text-[var(--text-secondary)]'
-            }`}
-          >
-            {sm.label}
-          </button>
-        ))}
-      </div>
-
       <div
         key={currentCreature.id}
         data-creature-id={currentCreature.id}
-        className="animate-pop-in flex flex-col items-center gap-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6"
+        className="animate-pop-in flex flex-col items-center gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6"
       >
-        {subMode === 'sound' && !feedback ? (
-          <button
-            type="button"
-            onClick={() => playCreatureTone(currentCreature.id)}
-            className="hp-button flex h-32 w-32 animate-pulse items-center justify-center rounded-full border-2 border-dashed border-[var(--house-primary)] text-4xl"
-            aria-label="Play creature sound"
-          >
-            🔊
-          </button>
-        ) : (
-          <img
-            src={currentCreature.imageUrl}
-            alt="Mystery creature"
-            loading="lazy"
-            className="h-32 w-32 rounded-full object-cover ring-2 ring-[var(--house-primary)]/40"
-            style={{ filter, transition: 'filter 150ms linear', boxShadow: `0 0 32px -4px var(--house-glow)` }}
-          />
+        <img
+          src={imageSrc}
+          alt="Mystery creature"
+          loading="lazy"
+          className="h-32 w-32 rounded-full object-cover ring-2 ring-[var(--house-primary)]/40"
+          style={{ boxShadow: `0 0 32px -4px var(--house-glow)` }}
+        />
+        {!feedback && (
+          <p className="text-sm text-[var(--text-secondary)]">
+            Guess {attemptsUsed + 1} of {MAX_ATTEMPTS}
+          </p>
         )}
       </div>
+
+      {wrongGuesses.length > 0 && !feedback && (
+        <ul className="flex flex-col gap-2">
+          {wrongGuesses.map((guess, index) => (
+            <li
+              key={`${guess.id}-${index}`}
+              className="animate-pop-in flex items-center gap-2 rounded-lg border border-[var(--danger-border)] bg-[var(--danger-bg)] p-2 text-sm text-[var(--danger)]"
+            >
+              <span className="font-medium">{guess.name}</span>
+            </li>
+          ))}
+        </ul>
+      )}
 
       {!feedback && <CreatureSearchSelect onSelect={handleSelect} />}
 

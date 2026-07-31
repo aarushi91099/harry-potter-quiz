@@ -37,7 +37,7 @@ export const modeCatalog: ModeMeta[] = [
   {
     id: 'guessCreature',
     name: 'Guess the Creature',
-    description: 'Recognize a creature by silhouette, blur, or sound.',
+    description: 'Guess the creature from its silhouette before your two chances run out.',
     image: '/mode-icons/guessCreature.png',
   },
   {

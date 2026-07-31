@@ -16,7 +16,7 @@ function renderMode() {
 }
 
 function findRenderedCreature() {
-  // Read the true rendered creature id from a data attribute (present regardless of sub-mode)
+  // Read the true rendered creature id from a data attribute (present regardless of reveal stage)
   // rather than reverse-matching the generated placeholder avatar, since several creature names
   // are single words and can share the same initials (e.g. "Boggart" / "Basilisk" -> "B").
   const id = document.querySelector('[data-creature-id]')?.getAttribute('data-creature-id');
@@ -25,63 +25,75 @@ function findRenderedCreature() {
   return creature;
 }
 
+async function guessWrong(user: ReturnType<typeof userEvent.setup>, name: string) {
+  await user.type(screen.getByRole('combobox'), name);
+  await user.click(await screen.findByRole('option', { name }));
+}
+
 describe('GuessCreatureMode', () => {
   beforeEach(() => {
     useProgression.getState().reset();
   });
 
-  it('defaults to Silhouette sub-mode with a brightness(0) filter', () => {
-    renderMode();
-    const img = screen.getByAltText('Mystery creature');
-    expect(img.style.filter).toBe('brightness(0)');
-  });
-
-  it('switches to Blurry sub-mode and applies a blur filter', async () => {
-    const user = userEvent.setup();
-    renderMode();
-    await user.click(screen.getByRole('button', { name: 'Blurry' }));
-    expect(screen.getByAltText('Mystery creature').style.filter).toMatch(/blur\(/);
-  });
-
-  it('switches to Sound sub-mode and shows a play button instead of an image', async () => {
-    const user = userEvent.setup();
-    renderMode();
-    await user.click(screen.getByRole('button', { name: 'Sound' }));
-    expect(screen.getByRole('button', { name: 'Play creature sound' })).toBeInTheDocument();
-    expect(screen.queryByAltText('Mystery creature')).not.toBeInTheDocument();
-  });
-
-  it('marks correct and awards points for the right creature', async () => {
-    const user = userEvent.setup();
+  it('defaults to the black silhouette image', () => {
     renderMode();
     const creature = findRenderedCreature();
-
-    await user.type(screen.getByRole('combobox'), creature.name);
-    await user.click(await screen.findByRole('option', { name: creature.name }));
-
-    expect(await screen.findByText('Correct!')).toBeInTheDocument();
-    expect(screen.getByText(creature.description)).toBeInTheDocument();
-    expect(useGameSession.getState().score).toBeGreaterThan(0);
+    const img = screen.getByAltText('Mystery creature');
+    expect(img.getAttribute('src')).toBe(`/creature-images/black_silhouette/${creature.id}.png`);
   });
 
-  it('marks incorrect for the wrong creature', async () => {
+  it('shows a red wrong-guess entry and switches to the white-background silhouette after one wrong guess', async () => {
     const user = userEvent.setup();
     renderMode();
     const creature = findRenderedCreature();
     const wrongName = [...creaturesById.values()].find((c) => c.id !== creature.id)!.name;
 
-    await user.type(screen.getByRole('combobox'), wrongName);
-    await user.click(await screen.findByRole('option', { name: wrongName }));
+    await guessWrong(user, wrongName);
 
-    expect(await screen.findByText('Not quite.')).toBeInTheDocument();
+    expect(screen.getByText(wrongName)).toBeInTheDocument();
+    expect(screen.queryByText('Not quite.')).not.toBeInTheDocument();
+    const img = screen.getByAltText('Mystery creature');
+    expect(img.getAttribute('src')).toBe(`/creature-images/silhouette/${creature.id}.png`);
   });
 
-  it('does not throw when playing the sound button repeatedly', async () => {
+  it('reveals the coloured image and marks incorrect after two wrong guesses', async () => {
     const user = userEvent.setup();
     renderMode();
-    await user.click(screen.getByRole('button', { name: 'Sound' }));
-    const playButton = screen.getByRole('button', { name: 'Play creature sound' });
-    await expect(user.click(playButton)).resolves.not.toThrow();
-    await expect(user.click(playButton)).resolves.not.toThrow();
+    const creature = findRenderedCreature();
+    const wrongOptions = [...creaturesById.values()].filter((c) => c.id !== creature.id);
+
+    await guessWrong(user, wrongOptions[0].name);
+    await guessWrong(user, wrongOptions[1].name);
+
+    expect(await screen.findByText('Not quite.')).toBeInTheDocument();
+    const img = screen.getByAltText('Mystery creature');
+    expect(img.getAttribute('src')).toBe(`/creature-images/creatures/${creature.id}.png`);
+  });
+
+  it('marks correct and awards points for the right creature on the first guess', async () => {
+    const user = userEvent.setup();
+    renderMode();
+    const creature = findRenderedCreature();
+
+    await guessWrong(user, creature.name);
+
+    expect(await screen.findByText('Correct!')).toBeInTheDocument();
+    expect(screen.getByText(creature.description)).toBeInTheDocument();
+    expect(useGameSession.getState().score).toBeGreaterThan(0);
+    const img = screen.getByAltText('Mystery creature');
+    expect(img.getAttribute('src')).toBe(`/creature-images/creatures/${creature.id}.png`);
+  });
+
+  it('marks correct on the second guess after one wrong guess', async () => {
+    const user = userEvent.setup();
+    renderMode();
+    const creature = findRenderedCreature();
+    const wrongName = [...creaturesById.values()].find((c) => c.id !== creature.id)!.name;
+
+    await guessWrong(user, wrongName);
+    await guessWrong(user, creature.name);
+
+    expect(await screen.findByText('Correct!')).toBeInTheDocument();
+    expect(useGameSession.getState().score).toBeGreaterThan(0);
   });
 });
