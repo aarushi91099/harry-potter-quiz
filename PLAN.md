@@ -46,7 +46,6 @@ src/
     houses.ts
   engine/              # Game Engine Layer — mode-agnostic mechanics
     QuestionEngine.ts    # random selection, no-repeat tracking, difficulty filtering
-    ClueEngine.ts        # progressive clue reveal (Guess the Character)
     BlurEngine.ts        # blur-level-over-time timer logic
     types.ts             # shared engine interfaces (Question, Attempt, Result)
   scoring/             # Scoring Layer
@@ -175,7 +174,7 @@ All character-identification modes (**Quotes**, **Blurry Character Guess**, **Gu
 4. **Guess the Hogwarts House** — scenario + 4-way house selector (inherently 4 options — houses are a fixed enum, not subject to the "no four-option" constraint, which specifically targets character identification); reasoning shown after.
 5. **Guess the Creature** — three sub-modes (Silhouette/Blurry/Sound) share one `CreatureSearchSelect` (same pattern as character search, over the creature catalog) rather than fixed options, since REQUEST doesn't exempt creatures from full-catalog identification; description shown after.
 6. **Finish the Dialogue** — cloze-style text input (free text with fuzzy match against `answer`, tolerant of minor punctuation/case differences) or select-the-missing-phrase from a short in-context list; full dialogue revealed after.
-7. **Guess the Character** — `ClueEngine` reveals clue categories one at a time (gender → affiliation → ability → ... ), `CharacterSearchSelect` available from clue 1 onward; score decreases per additional clue revealed before a correct guess.
+7. **Guess the Character** — Wordle-style trait comparison: each `CharacterSearchSelect` guess unfolds a row comparing the guessed character's traits (gender, house, blood status, affiliation, occupation, patronus, origin, first appearance) against the mystery character — correct/partial/incorrect, plus earlier/later arrows for first appearance; unlimited guesses, score decreases per additional guess before a correct one.
 
 ---
 

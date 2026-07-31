@@ -41,9 +41,9 @@ export function computeScore(mode: Attempt['mode'], ctx: ScoreContext): number {
     }
 
     case 'guessCharacter': {
-      const cluesRevealed = ctx.cluesRevealed ?? 1;
-      const decayPerExtraClue = 0.15;
-      const factor = clamp(1 - (cluesRevealed - 1) * decayPerExtraClue, 0.25, 1);
+      const guessCount = ctx.guessCount ?? 1;
+      const decayPerExtraGuess = 0.15;
+      const factor = clamp(1 - (guessCount - 1) * decayPerExtraGuess, 0.25, 1);
       return Math.round(base * factor);
     }
 

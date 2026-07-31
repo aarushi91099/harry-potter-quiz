@@ -15,7 +15,7 @@ export const modeCatalog: ModeMeta[] = [
   { id: 'guessHouse', name: 'Guess the Hogwarts House', description: 'Match a scenario to the right house.', icon: '🏰' },
   { id: 'guessCreature', name: 'Guess the Creature', description: 'Recognize a creature by silhouette, blur, or sound.', icon: '🐾' },
   { id: 'finishDialogue', name: 'Finish the Dialogue', description: 'Complete an iconic line of dialogue.', icon: '📜' },
-  { id: 'guessCharacter', name: 'Guess the Character', description: 'Identify a character from progressively revealed clues.', icon: '🔍' },
+  { id: 'guessCharacter', name: 'Guess the Character', description: 'Compare traits after every guess until you find the match.', icon: '🔍' },
 ];
 
 export const modeById = new Map(modeCatalog.map((m) => [m.id, m]));

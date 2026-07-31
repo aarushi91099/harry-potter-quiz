@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { GuessCharacterMode } from './GuessCharacterMode';
-import { buildCharacterClues } from './buildCharacterClues';
+import { ATTRIBUTE_COLUMNS } from './characterAttributes';
 import { charactersById } from '../../data/characters';
 import { useGameSession } from '../../store/useGameSession';
 import { useProgression } from '../../store/useProgression';
@@ -16,23 +16,16 @@ function renderMode() {
   );
 }
 
-function renderedClueLines(): string[] {
-  return [...document.querySelectorAll('ul li')].map((li) => li.textContent ?? '');
-}
-
-async function revealAllClues(user: ReturnType<typeof userEvent.setup>) {
-  while (screen.queryByRole('button', { name: 'Reveal next clue' })) {
-    await user.click(screen.getByRole('button', { name: 'Reveal next clue' }));
-  }
-}
-
-function findRenderedCharacter() {
-  // Read the true rendered character id from a data attribute rather than reverse-matching
-  // clue text, since larger catalogs can produce characters with overlapping clue values.
-  const id = document.querySelector('ul')?.getAttribute('data-character-id');
+function findTargetCharacter() {
+  const id = document.querySelector('[data-character-id]')?.getAttribute('data-character-id');
   const character = id ? charactersById.get(id) : undefined;
-  if (!character) throw new Error('Could not identify rendered character from data-character-id');
+  if (!character) throw new Error('Could not identify the target character from data-character-id');
   return character;
+}
+
+async function guess(user: ReturnType<typeof userEvent.setup>, name: string) {
+  await user.type(screen.getByRole('combobox'), name);
+  await user.click(await screen.findByRole('option', { name }));
 }
 
 describe('GuessCharacterMode', () => {
@@ -40,58 +33,57 @@ describe('GuessCharacterMode', () => {
     useProgression.getState().reset();
   });
 
-  it('starts with exactly one clue visible', () => {
+  it('shows no guess rows before the first guess', () => {
     renderMode();
-    expect(renderedClueLines()).toHaveLength(1);
-    expect(renderedClueLines()[0]).toMatch(/^Gender:/);
+    expect(screen.getByText(/your guesses will unfold here/i)).toBeInTheDocument();
   });
 
-  it('reveals one additional clue per click', async () => {
-    const user = userEvent.setup();
+  it('renders a header for every trait column', () => {
     renderMode();
-    const before = renderedClueLines().length;
-    await user.click(screen.getByRole('button', { name: 'Reveal next clue' }));
-    expect(renderedClueLines().length).toBe(before + 1);
+    for (const column of ATTRIBUTE_COLUMNS) {
+      expect(screen.getByText(column.label)).toBeInTheDocument();
+    }
   });
 
-  it('marks correct and records cluesRevealed in scoring context', async () => {
+  it('adds a comparison row after a wrong guess, without ending the round', async () => {
     const user = userEvent.setup();
     renderMode();
-    await revealAllClues(user);
-    const cluesShown = renderedClueLines().length;
-    const character = findRenderedCharacter();
+    const target = findTargetCharacter();
+    const wrong = [...charactersById.values()].find((c) => c.id !== target.id)!;
 
-    await user.type(screen.getByRole('combobox'), character.name);
-    await user.click(await screen.findByRole('option', { name: character.name }));
+    await guess(user, wrong.name);
+
+    expect(screen.getByText(wrong.name)).toBeInTheDocument();
+    expect(screen.queryByText('Correct!')).not.toBeInTheDocument();
+    expect(screen.getByRole('combobox')).toBeEnabled();
+  });
+
+  it('allows unlimited guesses until the correct character is found', async () => {
+    const user = userEvent.setup();
+    renderMode();
+    const target = findTargetCharacter();
+    const wrongCharacters = [...charactersById.values()].filter((c) => c.id !== target.id).slice(0, 3);
+
+    for (const wrong of wrongCharacters) {
+      await guess(user, wrong.name);
+    }
+    await guess(user, target.name);
 
     expect(await screen.findByText('Correct!')).toBeInTheDocument();
-    expect(useGameSession.getState().lastResult?.attempt.context?.cluesRevealed).toBe(cluesShown);
+    expect(screen.getByText(new RegExp(`solved in ${wrongCharacters.length + 1} guesses`, 'i'))).toBeInTheDocument();
   });
 
-  it('marks incorrect when the wrong character is chosen', async () => {
+  it('records guessCount in the scoring context and reveals the answer', async () => {
     const user = userEvent.setup();
     renderMode();
-    await revealAllClues(user);
-    const character = findRenderedCharacter();
-    const wrongName = [...charactersById.values()].find((c) => c.id !== character.id)!.name;
+    const target = findTargetCharacter();
+    const wrong = [...charactersById.values()].find((c) => c.id !== target.id)!;
 
-    await user.type(screen.getByRole('combobox'), wrongName);
-    await user.click(await screen.findByRole('option', { name: wrongName }));
+    await guess(user, wrong.name);
+    await guess(user, target.name);
 
-    expect(await screen.findByText('Not quite.')).toBeInTheDocument();
-  });
-
-  it('reveals every clue in the feedback banner after answering', async () => {
-    const user = userEvent.setup();
-    renderMode();
-    await revealAllClues(user);
-    const character = findRenderedCharacter();
-
-    await user.type(screen.getByRole('combobox'), character.name);
-    await user.click(await screen.findByRole('option', { name: character.name }));
-    await screen.findByText('Correct!');
-
-    const fullClueCount = buildCharacterClues(character).length;
-    expect(within(document.querySelector('ul')!).getAllByRole('listitem')).toHaveLength(fullClueCount);
+    expect(await screen.findByText('Correct!')).toBeInTheDocument();
+    expect(screen.getByText(target.name, { selector: 'strong' })).toBeInTheDocument();
+    expect(useGameSession.getState().lastResult?.attempt.context?.guessCount).toBe(2);
   });
 });

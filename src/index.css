@@ -30,6 +30,9 @@
   --danger: #f87171;
   --danger-bg: rgba(248, 113, 113, 0.12);
   --danger-border: rgba(248, 113, 113, 0.35);
+  --partial: #eab84e;
+  --partial-bg: rgba(234, 184, 78, 0.14);
+  --partial-border: rgba(234, 184, 78, 0.4);
 
   /* Default (no house chosen): Hogwarts gold. */
   --house-primary: var(--gold);
@@ -163,6 +166,23 @@ body {
 }
 .animate-toast-in {
   animation: toast-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Guess-grid cell reveal: each trait cell in a newly-submitted guess row unfolds left to right. */
+@keyframes card-unfold {
+  from {
+    opacity: 0;
+    transform: rotateX(-90deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(0deg);
+  }
+}
+.animate-card-unfold {
+  animation: card-unfold 0.35s ease-out both;
+  transform-origin: top center;
+  backface-visibility: hidden;
 }
 
 @keyframes shimmer {
@@ -318,7 +338,8 @@ body {
   .hp-button,
   .hp-sparkle,
   .hp-medallion,
-  .hp-corner {
+  .hp-corner,
+  .animate-card-unfold {
     animation: none !important;
     transition: none !important;
   }

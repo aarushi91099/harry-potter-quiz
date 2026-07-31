@@ -31,11 +31,11 @@ describe('computeScore', () => {
     expect(slow).toBe(150);
   });
 
-  it('reduces guessCharacter score as more clues are revealed', () => {
-    const firstClue = computeScore('guessCharacter', { difficulty: 'medium', cluesRevealed: 1 });
-    const fourthClue = computeScore('guessCharacter', { difficulty: 'medium', cluesRevealed: 4 });
-    expect(firstClue).toBeGreaterThan(fourthClue);
-    expect(firstClue).toBe(150);
+  it('reduces guessCharacter score as more guesses are made', () => {
+    const firstGuess = computeScore('guessCharacter', { difficulty: 'medium', guessCount: 1 });
+    const fourthGuess = computeScore('guessCharacter', { difficulty: 'medium', guessCount: 4 });
+    expect(firstGuess).toBeGreaterThan(fourthGuess);
+    expect(firstGuess).toBe(150);
   });
 });
 

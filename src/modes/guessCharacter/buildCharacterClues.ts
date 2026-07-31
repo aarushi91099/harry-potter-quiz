@@ -1,5 +1,9 @@
 import type { Character } from '../../data/types';
-import type { Clue } from '../../engine/ClueEngine';
+
+export interface Clue {
+  category: string;
+  value: string;
+}
 
 /**
  * Ordered from least to most revealing, per REQUEST.md's worked example
