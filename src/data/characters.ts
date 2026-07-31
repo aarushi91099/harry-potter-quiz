@@ -1,9 +1,8 @@
-import { placeholderAvatarUrl } from '../lib/avatarPlaceholder';
 import { createSearchIndex } from '../lib/searchIndex';
 import type { Character } from './types';
 
 function character(c: Omit<Character, 'imageUrl'>): Character {
-  return { ...c, imageUrl: placeholderAvatarUrl(c.name) };
+  return { ...c, imageUrl: `${import.meta.env.BASE_URL}character-images/${c.id}.png` };
 }
 
 /**

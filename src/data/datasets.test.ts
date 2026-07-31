@@ -26,8 +26,14 @@ describe('seed datasets', () => {
     }
   });
 
-  it('every character and creature has a generated placeholder image', () => {
-    for (const item of [...characters, ...creatures]) {
+  it('every character has a cropped character-images asset', () => {
+    for (const item of characters) {
+      expect(item.imageUrl).toBe(`/character-images/${item.id}.png`);
+    }
+  });
+
+  it('every creature has a generated placeholder image', () => {
+    for (const item of creatures) {
       expect(item.imageUrl.startsWith('data:image/svg+xml')).toBe(true);
     }
   });
