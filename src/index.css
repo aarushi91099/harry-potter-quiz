@@ -234,47 +234,28 @@ body {
   animation: twinkle 2.6s ease-in-out infinite;
 }
 
-/* Ornate frame for the mode-select cards: gold corner brackets on a bordered panel. */
+/* Ornate frame for the mode-select cards: gradient panel behind an illustrated gold picture-frame border. */
 .hp-ornate-card {
   position: relative;
   background: linear-gradient(160deg, var(--bg-surface), var(--bg-base) 120%);
 }
 
-.hp-corner {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  border-color: var(--house-primary);
-  opacity: 0.5;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
+.hp-mode-frame {
+  border-style: solid;
+  border-color: var(--border);
+  border-width: 12px;
+  border-image-source: url('/border.png');
+  border-image-slice: 20%;
+  border-image-repeat: stretch;
+  transition: filter 0.2s ease;
 }
-.hp-ornate-card:hover .hp-corner {
-  opacity: 1;
+.hp-mode-frame:hover {
+  filter: brightness(1.12);
 }
-.hp-corner-tl {
-  top: 7px;
-  left: 7px;
-  border-top: 2px solid;
-  border-left: 2px solid;
-}
-.hp-corner-tr {
-  top: 7px;
-  right: 7px;
-  border-top: 2px solid;
-  border-right: 2px solid;
-}
-.hp-corner-bl {
-  bottom: 7px;
-  left: 7px;
-  border-bottom: 2px solid;
-  border-left: 2px solid;
-}
-.hp-corner-br {
-  bottom: 7px;
-  right: 7px;
-  border-bottom: 2px solid;
-  border-right: 2px solid;
+@media (min-width: 640px) {
+  .hp-mode-frame {
+    border-width: 18px;
+  }
 }
 
 /* Circular medallion icon badge, double gold ring on a dark well. */
@@ -345,7 +326,7 @@ body {
   .hp-button,
   .hp-sparkle,
   .hp-medallion,
-  .hp-corner,
+  .hp-mode-frame,
   .animate-card-unfold {
     animation: none !important;
     transition: none !important;

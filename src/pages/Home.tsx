@@ -34,13 +34,8 @@ export function Home() {
             key={mode.id}
             to={`/play/${mode.id}`}
             style={{ animationDelay: `${i * 60}ms` }}
-            className="hp-card hp-ornate-card animate-fade-in-up flex items-center gap-4 rounded-xl border border-[var(--border)] p-4"
+            className="hp-card hp-ornate-card hp-mode-frame animate-fade-in-up flex items-center gap-4 rounded-xl p-4"
           >
-            <span className="hp-corner hp-corner-tl" aria-hidden="true" />
-            <span className="hp-corner hp-corner-tr" aria-hidden="true" />
-            <span className="hp-corner hp-corner-bl" aria-hidden="true" />
-            <span className="hp-corner hp-corner-br" aria-hidden="true" />
-
             <span className="hp-medallion shrink-0" aria-hidden="true">
               <img src={mode.image} alt="" className="h-full w-full rounded-full object-cover" />
             </span>
