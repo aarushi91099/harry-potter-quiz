@@ -43,7 +43,7 @@ export const modeCatalog: ModeMeta[] = [
   {
     id: 'finishDialogue',
     name: 'Finish the Dialogue',
-    description: 'Complete an iconic line of dialogue.',
+    description: 'Complete an iconic line of dialogue — 3 chances, with a letter revealed each miss.',
     image: '/mode-icons/finishDialogue.png',
   },
   {
