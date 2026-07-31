@@ -8,49 +8,51 @@ export interface ModeMeta {
   image: string;
 }
 
+const iconUrl = (file: string) => `${import.meta.env.BASE_URL}mode-icons/${file}`;
+
 /** Metadata for the 7 quiz modes from REQUEST.md, used to drive the mode-select UI. */
 export const modeCatalog: ModeMeta[] = [
   {
     id: 'quotes',
     name: 'Popular Quotes',
     description: 'Identify who said a famous line.',
-    image: '/mode-icons/quotes.png',
+    image: iconUrl('quotes.png'),
   },
   {
     id: 'blurryCharacter',
     name: 'Blurry Character Guess',
     description: 'Name the character before the blur clears.',
-    image: '/mode-icons/blurryCharacter.png',
+    image: iconUrl('blurryCharacter.png'),
   },
   {
     id: 'spellVsVillain',
     name: 'Spell vs Villain Challenge',
     description: 'Pick the most effective spell for the scenario.',
-    image: '/mode-icons/spellVsVillain.png',
+    image: iconUrl('spellVsVillain.png'),
   },
   {
     id: 'sortingHat',
     name: 'Sorting Hat Quiz',
     description: 'Answer 5 questions about yourself and let the Sorting Hat reveal your house.',
-    image: '/mode-icons/guessHouse.png',
+    image: iconUrl('guessHouse.png'),
   },
   {
     id: 'guessCreature',
     name: 'Guess the Creature',
     description: 'Guess the creature from its silhouette before your two chances run out.',
-    image: '/mode-icons/guessCreature.png',
+    image: iconUrl('guessCreature.png'),
   },
   {
     id: 'finishDialogue',
     name: 'Finish the Dialogue',
     description: 'Complete an iconic line of dialogue — 3 chances, with a letter revealed each miss.',
-    image: '/mode-icons/finishDialogue.png',
+    image: iconUrl('finishDialogue.png'),
   },
   {
     id: 'guessCharacter',
     name: 'Guess the Character',
     description: 'Compare traits after every guess until you find the match.',
-    image: '/mode-icons/guessCharacter.png',
+    image: iconUrl('guessCharacter.png'),
   },
 ];
 

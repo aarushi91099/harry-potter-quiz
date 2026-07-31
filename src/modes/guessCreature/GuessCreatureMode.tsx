@@ -17,7 +17,7 @@ interface Feedback {
 }
 
 function creatureImagePath(variant: 'black_silhouette' | 'silhouette' | 'creatures', id: string) {
-  return `/creature-images/${variant}/${id}.png`;
+  return `${import.meta.env.BASE_URL}creature-images/${variant}/${id}.png`;
 }
 
 export function GuessCreatureMode() {
