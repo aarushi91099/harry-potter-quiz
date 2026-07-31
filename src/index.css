@@ -214,10 +214,10 @@ body {
   border-radius: 1rem;
   border: 1px solid var(--border-subtle);
   background:
-    linear-gradient(to bottom, rgba(5, 6, 13, 0.8), rgba(5, 6, 13, 0.4) 55%, rgba(5, 6, 13, 0.88)),
-    url('/castle-skyline.svg');
+    linear-gradient(to bottom, rgba(5, 6, 13, 0.65), rgba(5, 6, 13, 0.25) 55%, rgba(5, 6, 13, 0.8)),
+    url('/castle.png');
   background-size: cover;
-  background-position: bottom;
+  background-position: center;
   background-repeat: no-repeat;
 }
 
