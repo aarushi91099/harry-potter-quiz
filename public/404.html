@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hogwarts Trivia</title>
+    <script>
+      // Single-Page Apps for GitHub Pages: redirect unknown paths to index.html,
+      // preserving the intended route in a query param for App to restore.
+      var pathSegmentsToKeep = 1; // keeps the "/harry-potter-quiz" repo segment
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?p=' +
+        encodeURIComponent(l.pathname.slice(l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/').length) +
+          l.search + l.hash)
+      );
+    </script>
+  </head>
+  <body></body>
+</html>

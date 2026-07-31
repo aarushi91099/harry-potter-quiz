@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/harry-potter-quiz/',
   plugins: [react(), tailwindcss()],
   test: {
     environment: 'jsdom',
