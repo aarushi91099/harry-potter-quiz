@@ -1,0 +1,54 @@
+<svg viewBox="0 0 1600 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f0c75e" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#f0c75e" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <circle cx="1300" cy="90" r="120" fill="url(#moonGlow)" />
+  <circle cx="1300" cy="90" r="46" fill="#f2ead8" opacity="0.85" />
+
+  <path d="M0,380 L0,300 Q400,260 800,300 T1600,290 L1600,380 Z" fill="#0d1326" opacity="0.6" />
+
+  <g fill="#141b33">
+    <rect x="90" y="260" width="30" height="120" />
+    <polygon points="90,260 105,225 120,260" />
+    <rect x="120" y="200" width="46" height="180" />
+    <polygon points="120,200 143,150 166,200" />
+
+    <rect x="330" y="240" width="34" height="140" />
+    <polygon points="330,240 347,205 364,240" />
+
+    <rect x="640" y="180" width="50" height="200" />
+    <polygon points="640,180 665,130 690,180" />
+    <rect x="700" y="120" width="90" height="260" />
+    <polygon points="700,120 745,50 790,120" />
+    <rect x="790" y="190" width="46" height="190" />
+    <polygon points="790,190 813,145 836,190" />
+
+    <rect x="1000" y="220" width="40" height="160" />
+    <polygon points="1000,220 1020,175 1040,220" />
+    <rect x="1060" y="250" width="30" height="130" />
+    <polygon points="1060,250 1075,215 1090,250" />
+
+    <rect x="1200" y="240" width="36" height="140" />
+    <polygon points="1200,240 1218,200 1236,240" />
+  </g>
+
+  <rect x="0" y="360" width="1600" height="20" fill="#0d1326" />
+
+  <g fill="#d3a625" opacity="0.85">
+    <rect x="135" y="230" width="6" height="10" />
+    <rect x="150" y="260" width="6" height="10" />
+    <rect x="345" y="270" width="5" height="9" />
+    <rect x="655" y="220" width="6" height="10" />
+    <rect x="720" y="160" width="7" height="12" />
+    <rect x="745" y="200" width="7" height="12" />
+    <rect x="770" y="240" width="7" height="12" />
+    <rect x="805" y="230" width="6" height="10" />
+    <rect x="1012" y="255" width="6" height="10" />
+    <rect x="1070" y="280" width="5" height="9" />
+    <rect x="1213" y="270" width="5" height="9" />
+  </g>
+</svg>

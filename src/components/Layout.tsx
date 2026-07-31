@@ -12,10 +12,10 @@ const NAV_LINKS = [
 ];
 
 function navLinkClass({ isActive }: { isActive: boolean }): string {
-  return `rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+  return `rounded-md border px-3 py-2 text-sm font-medium transition-colors ${
     isActive
-      ? 'bg-[var(--house-primary)] text-[#05060d]'
-      : 'text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--text-primary)]'
+      ? 'border-[var(--house-primary)] text-[var(--house-primary)]'
+      : 'border-transparent text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--text-primary)]'
   }`;
 }
 
@@ -48,6 +48,9 @@ export function Layout() {
               title={`${levelProgress.current}/${levelProgress.required} XP into level ${level}`}
             >
               Level {level} · {totalXp} XP
+            </span>
+            <span className="hp-crest" aria-hidden="true" title="Hogwarts Trivia">
+              H
             </span>
           </div>
         </header>

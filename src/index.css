@@ -187,6 +187,114 @@ body {
   box-shadow: 0 10px 28px -12px var(--house-glow);
 }
 
+/* Hero banner: castle skyline silhouette with a dark vignette so gold title text stays legible. */
+.hp-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid var(--border-subtle);
+  background:
+    linear-gradient(to bottom, rgba(5, 6, 13, 0.8), rgba(5, 6, 13, 0.4) 55%, rgba(5, 6, 13, 0.88)),
+    url('/castle-skyline.svg');
+  background-size: cover;
+  background-position: bottom;
+  background-repeat: no-repeat;
+}
+
+.hp-sparkle {
+  color: var(--house-secondary);
+  opacity: 0.85;
+  animation: twinkle 2.6s ease-in-out infinite;
+}
+
+/* Ornate frame for the mode-select cards: gold corner brackets on a bordered panel. */
+.hp-ornate-card {
+  position: relative;
+  background: linear-gradient(160deg, var(--bg-surface), var(--bg-base) 120%);
+}
+
+.hp-corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: var(--house-primary);
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+.hp-ornate-card:hover .hp-corner {
+  opacity: 1;
+}
+.hp-corner-tl {
+  top: 7px;
+  left: 7px;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+.hp-corner-tr {
+  top: 7px;
+  right: 7px;
+  border-top: 2px solid;
+  border-right: 2px solid;
+}
+.hp-corner-bl {
+  bottom: 7px;
+  left: 7px;
+  border-bottom: 2px solid;
+  border-left: 2px solid;
+}
+.hp-corner-br {
+  bottom: 7px;
+  right: 7px;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+
+/* Circular medallion icon badge, double gold ring on a dark well. */
+.hp-medallion {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  border: 2px solid var(--house-primary);
+  background: radial-gradient(circle at 35% 30%, var(--bg-surface-raised), var(--bg-void) 75%);
+  box-shadow:
+    0 0 0 3px var(--bg-base),
+    0 0 16px -4px var(--house-glow);
+  transition: transform 0.2s ease;
+}
+.hp-medallion::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 1px solid var(--house-primary);
+  opacity: 0.35;
+}
+.hp-ornate-card:hover .hp-medallion {
+  transform: scale(1.06);
+}
+
+/* Small crest avatar shown in the header. */
+.hp-crest {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  border: 2px solid var(--house-primary);
+  background: radial-gradient(circle at 35% 30%, var(--bg-surface-raised), var(--bg-void) 75%);
+  box-shadow: 0 0 12px -3px var(--house-glow);
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+  color: var(--house-primary);
+  font-weight: 700;
+}
+
 .hp-button {
   transition:
     transform 0.15s ease,
@@ -207,7 +315,10 @@ body {
   .animate-pop-in,
   .animate-toast-in,
   .hp-card,
-  .hp-button {
+  .hp-button,
+  .hp-sparkle,
+  .hp-medallion,
+  .hp-corner {
     animation: none !important;
     transition: none !important;
   }
