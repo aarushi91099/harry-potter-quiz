@@ -25,7 +25,7 @@ const emptyCorrectByMode: Record<QuizMode, number> = {
   quotes: 0,
   blurryCharacter: 0,
   spellVsVillain: 0,
-  guessHouse: 0,
+  sortingHat: 0,
   guessCreature: 0,
   finishDialogue: 0,
   guessCharacter: 0,

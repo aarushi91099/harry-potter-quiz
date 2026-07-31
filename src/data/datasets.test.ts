@@ -3,7 +3,6 @@ import { characters, charactersById } from './characters';
 import { quotes } from './quotes';
 import { spells, spellsById } from './spells';
 import { spellScenarios } from './spellScenarios';
-import { houseScenarios } from './houseScenarios';
 import { creatures } from './creatures';
 import { dialogues } from './dialogues';
 
@@ -21,15 +20,10 @@ describe('seed datasets', () => {
   });
 
   it('has no duplicate ids within each dataset', () => {
-    for (const dataset of [characters, quotes, spells, spellScenarios, houseScenarios, creatures, dialogues]) {
+    for (const dataset of [characters, quotes, spells, spellScenarios, creatures, dialogues]) {
       const ids = dataset.map((item) => item.id);
       expect(new Set(ids).size).toBe(ids.length);
     }
-  });
-
-  it('house scenarios cover all four houses', () => {
-    const houses = new Set(houseScenarios.map((s) => s.correctHouse));
-    expect(houses).toEqual(new Set(['Gryffindor', 'Ravenclaw', 'Hufflepuff', 'Slytherin']));
   });
 
   it('every character and creature has a generated placeholder image', () => {
@@ -55,7 +49,6 @@ describe('seed datasets', () => {
     expect(quotes.length).toBeGreaterThanOrEqual(20);
     expect(spells.length).toBeGreaterThanOrEqual(20);
     expect(spellScenarios.length).toBeGreaterThanOrEqual(18);
-    expect(houseScenarios.length).toBeGreaterThanOrEqual(18);
     expect(creatures.length).toBeGreaterThanOrEqual(18);
     expect(dialogues.length).toBeGreaterThanOrEqual(16);
   });

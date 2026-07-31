@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { modeById } from '../data/modeCatalog';
 import { QuotesMode } from '../modes/quotes/QuotesMode';
 import { SpellVsVillainMode } from '../modes/spellVsVillain/SpellVsVillainMode';
-import { GuessHouseMode } from '../modes/guessHouse/GuessHouseMode';
+import { SortingHatMode } from '../modes/sortingHat/SortingHatMode';
 import { FinishDialogueMode } from '../modes/finishDialogue/FinishDialogueMode';
 import { GuessCharacterMode } from '../modes/guessCharacter/GuessCharacterMode';
 import { BlurryCharacterMode } from '../modes/blurryCharacter/BlurryCharacterMode';
@@ -22,8 +22,8 @@ export function QuizRunner() {
       return <QuotesMode />;
     case 'spellVsVillain':
       return <SpellVsVillainMode />;
-    case 'guessHouse':
-      return <GuessHouseMode />;
+    case 'sortingHat':
+      return <SortingHatMode />;
     case 'finishDialogue':
       return <FinishDialogueMode />;
     case 'guessCharacter':

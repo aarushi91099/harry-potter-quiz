@@ -45,13 +45,17 @@ export interface SpellScenario {
   difficulty: Difficulty;
 }
 
-export interface HouseScenario {
+export interface SortingOption {
+  id: string;
+  text: string;
+  house: HouseName;
+}
+
+export interface SortingQuestion {
   id: string;
   prompt: string;
-  correctHouse: HouseName;
-  reasoning: string;
-  ambiguity: 'clear' | 'moderate' | 'nuanced';
-  difficulty: Difficulty;
+  /** Exactly one option per house. */
+  options: SortingOption[];
 }
 
 export interface Creature {

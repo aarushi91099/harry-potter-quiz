@@ -76,9 +76,9 @@ describe('useGameSession', () => {
       difficulty: 'easy',
       correct: true,
     });
-    useGameSession.getState().start('guessHouse');
+    useGameSession.getState().start('sortingHat');
     const state = useGameSession.getState();
-    expect(state.mode).toBe('guessHouse');
+    expect(state.mode).toBe('sortingHat');
     expect(state.score).toBe(0);
     expect(state.totalCount).toBe(0);
   });

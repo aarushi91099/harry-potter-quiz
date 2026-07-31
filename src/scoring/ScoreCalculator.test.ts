@@ -5,7 +5,6 @@ import type { Attempt } from '../engine/types';
 describe('computeScore', () => {
   it('awards flat base points for non-time/clue modes', () => {
     expect(computeScore('quotes', { difficulty: 'easy' })).toBe(100);
-    expect(computeScore('guessHouse', { difficulty: 'medium' })).toBe(150);
     expect(computeScore('finishDialogue', { difficulty: 'hard' })).toBe(200);
   });
 
@@ -52,7 +51,7 @@ describe('scoreAttempt', () => {
 
   it('delegates to computeScore for a correct attempt', () => {
     const attempt: Attempt = {
-      mode: 'guessHouse',
+      mode: 'finishDialogue',
       questionId: 'q2',
       difficulty: 'easy',
       correct: true,

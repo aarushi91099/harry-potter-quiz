@@ -21,7 +21,6 @@ export function computeScore(mode: Attempt['mode'], ctx: ScoreContext): number {
 
   switch (mode) {
     case 'quotes':
-    case 'guessHouse':
     case 'finishDialogue':
       return base;
 

@@ -6,7 +6,7 @@ export type QuizMode =
   | 'quotes'
   | 'blurryCharacter'
   | 'spellVsVillain'
-  | 'guessHouse'
+  | 'sortingHat'
   | 'guessCreature'
   | 'finishDialogue'
   | 'guessCharacter';

@@ -29,9 +29,9 @@ export const modeCatalog: ModeMeta[] = [
     image: '/mode-icons/spellVsVillain.png',
   },
   {
-    id: 'guessHouse',
-    name: 'Guess the Hogwarts House',
-    description: 'Match a scenario to the right house.',
+    id: 'sortingHat',
+    name: 'Sorting Hat Quiz',
+    description: 'Answer 5 questions about yourself and let the Sorting Hat reveal your house.',
     image: '/mode-icons/guessHouse.png',
   },
   {

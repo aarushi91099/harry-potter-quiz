@@ -28,12 +28,6 @@ export const ACHIEVEMENTS: Achievement[] = [
     check: (stats) => stats.correctByMode.spellVsVillain >= 50,
   },
   {
-    id: 'house-scholar',
-    name: 'House Scholar',
-    description: 'Answer 50 Hogwarts House questions correctly.',
-    check: (stats) => stats.correctByMode.guessHouse >= 50,
-  },
-  {
     id: 'character-detective',
     name: 'Character Detective',
     description: 'Answer 50 Guess the Character questions correctly.',
