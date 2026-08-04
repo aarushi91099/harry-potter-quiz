@@ -92,7 +92,7 @@ export function GuessCreatureMode() {
           src={imageSrc}
           alt="Mystery creature"
           loading="lazy"
-          className="h-32 w-32 rounded-full object-cover ring-2 ring-[var(--house-primary)]/40"
+          className="h-32 w-32 rounded-full object-cover"
           style={{ boxShadow: `0 0 32px -4px var(--house-glow)` }}
         />
         {!feedback && (

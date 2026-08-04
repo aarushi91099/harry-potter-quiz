@@ -126,10 +126,12 @@ body {
 }
 
 @keyframes twinkle {
+
   0%,
   100% {
     opacity: 0.35;
   }
+
   50% {
     opacity: 0.75;
   }
@@ -140,11 +142,13 @@ body {
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 .animate-fade-in-up {
   animation: fade-in-up 0.4s ease-out both;
 }
@@ -154,11 +158,13 @@ body {
     opacity: 0;
     transform: scale(0.96);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
   }
 }
+
 .animate-pop-in {
   animation: pop-in 0.25s ease-out both;
 }
@@ -168,11 +174,13 @@ body {
     opacity: 0;
     transform: translateX(24px) scale(0.97);
   }
+
   to {
     opacity: 1;
     transform: translateX(0) scale(1);
   }
 }
+
 .animate-toast-in {
   animation: toast-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
@@ -183,11 +191,13 @@ body {
     opacity: 0;
     transform: rotateX(-90deg);
   }
+
   to {
     opacity: 1;
     transform: rotateX(0deg);
   }
 }
+
 .animate-card-unfold {
   animation: card-unfold 0.35s ease-out both;
   transform-origin: top center;
@@ -198,6 +208,7 @@ body {
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
@@ -210,6 +221,7 @@ body {
     box-shadow 0.2s ease,
     border-color 0.2s ease;
 }
+
 .hp-card:hover {
   transform: translateY(-2px);
   border-color: var(--house-primary);
@@ -222,10 +234,6 @@ body {
 .hp-hero {
   position: relative;
   overflow: hidden;
-  border-radius: 1rem;
-  border: 1px solid var(--border-subtle);
-  background: linear-gradient(to bottom, rgba(5, 6, 13, 0.35), rgba(5, 6, 13, 0.55));
-  backdrop-filter: blur(1px);
 }
 
 .hp-sparkle {
@@ -234,10 +242,9 @@ body {
   animation: twinkle 2.6s ease-in-out infinite;
 }
 
-/* Ornate frame for the mode-select cards: gradient panel behind an illustrated gold picture-frame border. */
+/* Ornate frame for the mode-select cards. */
 .hp-ornate-card {
   position: relative;
-  background: linear-gradient(160deg, var(--bg-surface), var(--bg-base) 120%);
 }
 
 .hp-mode-frame {
@@ -245,20 +252,22 @@ body {
   border-color: var(--border);
   border-width: 12px;
   border-image-source: url('/border.png');
-  border-image-slice: 20%;
+  border-image-slice: 20% fill;
   border-image-repeat: stretch;
   transition: filter 0.2s ease;
 }
+
 .hp-mode-frame:hover {
   filter: brightness(1.12);
 }
+
 @media (min-width: 640px) {
   .hp-mode-frame {
     border-width: 18px;
   }
 }
 
-/* Circular medallion icon badge, double gold ring on a dark well. */
+/* Circular medallion icon badge. The artwork already includes its own frame. */
 .hp-medallion {
   position: relative;
   display: flex;
@@ -268,21 +277,10 @@ body {
   height: 4.75rem;
   flex-shrink: 0;
   border-radius: 9999px;
-  border: 2px solid var(--house-primary);
-  background: radial-gradient(circle at 35% 30%, var(--bg-surface-raised), var(--bg-void) 75%);
-  box-shadow:
-    0 0 0 3px var(--bg-base),
-    0 0 16px -4px var(--house-glow);
+  box-shadow: 0 0 16px -4px var(--house-glow);
   transition: transform 0.2s ease;
 }
-.hp-medallion::after {
-  content: '';
-  position: absolute;
-  inset: -7px;
-  border-radius: 9999px;
-  border: 1px solid var(--house-primary);
-  opacity: 0.35;
-}
+
 .hp-ornate-card:hover .hp-medallion {
   transform: scale(1.06);
 }
@@ -309,15 +307,18 @@ body {
     box-shadow 0.2s ease,
     filter 0.2s ease;
 }
+
 .hp-button:hover:not(:disabled) {
   filter: brightness(1.08);
   box-shadow: 0 0 0 3px var(--house-glow);
 }
+
 .hp-button:active:not(:disabled) {
   transform: scale(0.97);
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .starfield,
   .animate-fade-in-up,
   .animate-pop-in,

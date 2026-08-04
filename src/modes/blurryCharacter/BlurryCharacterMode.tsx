@@ -104,7 +104,7 @@ export function BlurryCharacterMode() {
           alt="Mystery character"
           loading="lazy"
           data-character-id={currentCharacter.id}
-          className="h-48 w-48 rounded-full object-cover ring-2 ring-[var(--house-primary)]/40"
+          className="h-48 w-48 rounded-full object-cover"
           style={{
             filter: `blur(${blurPx}px)`,
             transition: 'filter 150ms linear',
